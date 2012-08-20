@@ -1,0 +1,6 @@
+{
+  "render": "archive",
+  "preview": true,
+  "theme": "./frontpage.html",
+  "index": false
+}

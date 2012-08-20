@@ -1,0 +1,36 @@
+a {
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.rss-feed {
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    padding: 1px 3px;
+    color: white;
+    background-color: #607890;
+    font-size: 10px;
+    line-height: 1em;
+    margin: 0 5px;
+    font-weight: normal;
+    position: relative;
+    top: -5px;
+    left: 5px;
+    display: inline-block;
+}
+
+.read-more,
+.read-more:visited,
+.read-more:active {
+    margin: 20px 0;
+    display: inline-block;
+    color: white;
+    padding: 0 10px;
+    height: 32px;
+    line-height: 32px;
+    background: #426B92;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}

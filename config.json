@@ -1,0 +1,11 @@
+{
+  "title": "lfont's blog",
+  "url": "my.blog.local",
+  "author": "Loïc Fontaine",
+  "description": "My awesome blog!",
+  "tags": [
+    "javascript",
+    "c#",
+    "code"
+  ]
+}
