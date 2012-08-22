@@ -282,6 +282,10 @@ article form.comments textarea {
   text-decoration: underline;
 }
 
+#sidebar p {
+  margin-bottom: 20px;
+}
+
 #sidebar ul {
   list-style-type: none; 
   margin: 0; padding: 0;
@@ -404,13 +408,13 @@ article form.comments textarea {
 }
 
 #footer p {
-  width: 40%;
+  width: 20%;
   float: left; 
   margin: 0; padding: 0; 
 }
 
 #footer ul {
-  width: 40%;
+  width: 75%;
   list-style-type: none; 
   text-align: right; 
   float: right; 

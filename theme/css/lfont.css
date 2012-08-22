@@ -2,11 +2,10 @@
   float: left;
   display: inline;
   color: white;
-  margin-left: 240px;
   font-size: 12px;
   font-weight: normal;
   line-height: 10px;
-  margin-top: 19px;
+  margin: 19px 0 0 270px;
 }
 
 #sidebar .rss-feed {

@@ -39,7 +39,7 @@ body {
 
 article {
   float: left;
-  width: 662px;
+  width: 100%;
   text-align: left;
   margin-bottom: 20px;
 }
