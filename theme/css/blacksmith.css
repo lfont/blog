@@ -29,7 +29,7 @@ article .readMore {
   min-height: 250px;
 }
 
-#sidebar img {
+#sidebar .author img {
   float: right;
   width: 200px;
   height: 200px;
