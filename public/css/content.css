@@ -1,0 +1,196 @@
+/*--------------------------------------------------------------
+ Header
+ --------------------------------------------------------------*/
+
+#header {
+  background-color: #333;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #333), color-stop(1, #222));
+  background-image: -webkit-linear-gradient(top, #333 0%, #222 100%);
+  background-image: -moz-linear-gradient(top, #333 0%, #222 100%);
+  background-image: -o-linear-gradient(top, #333 0%, #222 100%);
+  background-image: linear-gradient(top, #333 0%, #222 100%);
+  border-bottom: 1px solid #313133;
+  -webkit-box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.10), inset 0px -1px 0px rgba(255, 255, 255, 0.20);
+     -moz-box-shadow: 0px 10px 10px rgba(0,0,0,0.10), inset 0px -1px 0px rgba(255,255,255,0.20);
+          box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.10), inset 0px -1px 0px rgba(255, 255, 255, 0.20);
+}
+
+#header a {
+  color: white;
+  text-decoration: none;
+  font-size: 38px;
+  font-weight: bold;
+  position: absolute;
+  left: 30px;
+  top:  15px;
+}
+
+#header h1 {
+  font-family: georgia, serif; 
+  letter-spacing: -1px; 
+  float: left; 
+}
+
+/*--------------------------------------------------------------
+ Content
+ --------------------------------------------------------------*/
+
+article {
+  background-color: white;
+  border: 1px solid #CCC;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+  -webkit-box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.10), inset 0px -1px 0px rgba(255, 255, 255, 0.20);
+     -moz-box-shadow: 0px 5px 5px rgba(0,0,0,0.10), inset 0px -1px 0px rgba(255,255,255,0.20);
+          box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.10), inset 0px -1px 0px rgba(255, 255, 255, 0.20);
+}
+
+article h1,
+article h2,
+article h3,
+article h4,
+article h5 {
+  font-weight: normal;
+  letter-spacing: -1px;
+  padding-bottom: 20px;
+}
+
+article h1 {
+  font-size: 22px;
+}
+
+article h2 { 
+  font-size: 20px;
+}
+
+article h3 { 
+  font-size: 18px;
+}
+
+article h4 { 
+  font-size: 16px;
+}
+
+article h5 {
+  font-size: 14px;
+}
+
+article p {
+  line-height: 14px; 
+  margin: 0 0 1.2em;
+}
+
+article ul,
+article ol {
+  margin: 1em;
+}
+
+article ul {
+  list-style-type: square;
+}
+
+article li {
+  line-height: 15px; 
+  margin: 0 0 0 1em;
+}
+
+/*--------------------------------------------------------------
+ Sidebar
+ --------------------------------------------------------------*/
+
+#sidebar .sidebar-node > h3 {
+  border-bottom: 1px dashed #CCC;
+  font: bold 14px "lucidamac bold", "lucida grande", verdana, arial, helvetica, sans-serif;
+  margin: 0 0 10px 0;
+  padding: 10px 0;
+}
+
+#sidebar .sidebar-node > h3 > a:link,
+#sidebar .sidebar-node > h3 > a:visited {
+  color: #000;
+  text-decoration: none;
+}
+
+#sidebar .sidebar-node > h3 > a:hover,
+#sidebar .sidebar-node > h3 > a:active {
+  color: #000;
+  text-decoration: underline;
+}
+
+#sidebar p {
+  margin-bottom: 20px;
+}
+
+#sidebar ul {
+  list-style-type: none; 
+  margin: 0; padding: 0;
+  background-color: white;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, .065);
+     -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+          box-shadow: 0 1px 4px rgba(0, 0, 0, .065);
+}
+
+#sidebar li {
+  line-height: 20px;
+}
+
+#sidebar li a {
+  display: block;
+  margin: 0 0 -1px;
+  padding: 8px 14px;
+  border: 1px solid #CCC;
+}
+
+#sidebar li a:hover {
+  background-color: whiteSmoke;
+  text-decoration: none;
+}
+
+#sidebar li:first-child > a {
+  -webkit-border-top-left-radius: 6px;
+  -webkit-border-top-right-radius: 6px;
+     -moz-border-top-left-radius: 6px;
+     -moz-border-top-right-radius: 6px;
+          border-top-left-radius: 6px;
+          border-top-right-radius: 6px;
+}
+
+#sidebar li:last-child > a {
+  -webkit-border-bottom-left-radius: 6px;
+  -webkit-border-bottom-right-radius: 6px;
+     -moz-border-bottom-left-radius: 6px;
+     -moz-border-bottom-right-radius: 6px;
+          border-bottom-left-radius: 6px;
+          border-bottom-right-radius: 6px;
+}
+
+/*--------------------------------------------------------------
+ Footer
+ --------------------------------------------------------------*/
+
+#footer {
+  border-top: 1px dashed #CCC;
+  color: #666;
+  font-size: 90%; 
+}
+
+#footer p {
+  width: 20%;
+  float: left; 
+  margin: 0; padding: 0; 
+}
+
+#footer ul {
+  width: 75%;
+  list-style-type: none; 
+  text-align: right; 
+  float: right; 
+}
+
+#footer li {
+  padding: 0 0 0 1em;
+}

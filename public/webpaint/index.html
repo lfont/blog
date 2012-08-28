@@ -1,0 +1,124 @@
+
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="description" content="lfont a blog about my vision of development." />
+        <meta name="keywords" content="javascript,c#,code" />
+        <title>WebPaint - lfont's blog</title>
+        <link rel="icon" type="image/png" href="images/favicon.png" />
+        <link rel="stylesheet" href="/css/application.css" type="text/css" media="all" />
+        <link rel="stylesheet" href="/css/blacksmith.css" type="text/css" />
+        <script>
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-34256671-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+        <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    </head>
+    <body>
+        <div id="container">
+            <header id="header">
+                <h1 class="title">
+                    <a href="/">lfont's blog</a>
+                    <div class="tagline">The vision of a developer</div>
+                </h1>
+            </header>
+
+            <div class="metadata">
+                <div id="page">
+                    <article class="article">
+                        <h1 class="title"><a href="./webpaint">WebPaint</a></h1>
+                        <div class="content"><p><a href="https://github.com/lfont/WebPaint">WebPaint</a> is a drawing application writting entirely in JavaScript.<br />The 0.6 version has a canvas sharing feature that allow you to draw remotely.   
+
+</p>
+<p>WebPaint is a project that I do for fun so <a href="https://github.com/lfont/WebPaint/fork">fork it</a> and contribute!</p>
+</div>
+                    </article>
+                </div>
+
+                <div id="sidebar">
+                    <div class="sidebar-node author">
+                        <h3>About This Author</h3>
+                        <img class="if-gravatar gravatar" src="http://www.gravatar.com/avatar/34619a8ae564c2e0ce2998df24583fb1?r=pg&amp;s=200.jpg&amp;d=identicon" />
+                        <dl>
+                            <dt>Name: </dt>
+                            <dd class="name">Loïc Fontaine</dd>
+                        </dl>
+                        <dl class="if-github">
+                            <dt>Github: </dt>
+                            <dd class="github"><a href="https://github.com/lfont">lfont</a></dd>
+                        </dl>
+                        <dl class="if-twitter">
+                            <dt>Twitter: </dt>
+                            <dd class="twitter"><a href="https://twitter.com/loic_fontaine">loic_fontaine</a></dd>
+                        </dl>
+                    </div>
+
+                    <div class="sidebar-node if-date">
+                        <h3>About This Article</h3>
+                        <dl>
+                            <dt>Publish Date: </dt>
+                            <dd class="date">Monday, Aug 20 2012</dd>
+                        </dl>
+                    </div>
+                    
+                    <div class="sidebar-node if-byThisAuthor">
+                        <h3>More Articles By This Author</h3>
+                        <nav class="byThisAuthor"><ul><li><a href="/blacksmith">blacksmith</a></li><li><a href="/hello-world">hello world</a></li></ul></nav>
+                    </div>
+
+                    <div class="sidebar-node if-twitter">
+                        <h3>More News By This Author</h3>
+                        <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+                        <script>
+                            (function ($) {
+                                var user = $('.author .twitter a').text();
+
+                                new TWTR.Widget({
+                                    version: 2,
+                                    type: 'profile',
+                                    rpp: 4,
+                                    interval: 30000,
+                                    width: 'auto',
+                                    height: 250,
+                                    theme: {
+                                        shell: {
+                                            background: '#303030',
+                                            color: '#ffffff'
+                                        },
+                                        tweets: {
+                                            background: '#f5f5f5',
+                                            color: '#000000',
+                                            links: '#0080c0'
+                                        }
+                                    },
+                                    features: {
+                                        scrollbar: false,
+                                        loop: false,
+                                        live: true,
+                                        behavior: 'all'
+                                    }
+                                }).render().setUser(user).start();
+                            }(jQuery));
+                        </script>
+                    </div>
+                </div>
+            </div>
+
+            <footer id="footer">
+                <p>© 2012 Loïc Fontaine</p>
+                <ul>
+                    <li>Articles are licensed under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>. All code snippets used in the examples are in the public domain.</li>
+                    <li>Styled with a modified version of <a href="http://quotedprintable.com/pages/scribbish">scribbish</a> inspired by the theme of <a href="http://howtonode.org">HowToNode.org</a></li>
+                    <li>Powered by <a href="http://nodejitsu.com">Nodejitsu</a> / generated by <a href="http://blacksmith.jit.su">Blacksmith</a></li>
+                </ul>
+            </footer>
+        </div>
+    </body>
+</html>
