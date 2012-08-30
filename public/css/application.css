@@ -6,12 +6,29 @@
 @import 'layout.css';
 @import 'content.css';
 @import 'highlight/github.css';
-@import 'lfont.css';
 
-@media print { #sidebar { display: none; }
-               article { float: none; width: 90%; }
-               article pre { color: #000; background: #eee; }
-               article form.comments { display: none; } }
+@media print {
+  #page {
+    width: 100%;
+  }
+
+  #sidebar {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  #page {
+    width: 100%;
+    float: none;
+  }
+
+  #sidebar {
+    float: none;
+    max-width: none;
+    width: auto;
+  }
+}
 
 * {
   margin: 0;

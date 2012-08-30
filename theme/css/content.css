@@ -58,6 +58,12 @@ article h5 {
 
 article h1 {
   font-size: 22px;
+  background-color: whiteSmoke;
+  border-bottom: 1px dashed #CCC;
+  -webkit-border-radius: 4px 4px 0px 0px;
+     -moz-border-radius: 4px 4px 0px 0px;
+          border-radius: 4px 4px 0px 0px;
+  padding: 8px;
 }
 
 article h2 { 
@@ -99,23 +105,12 @@ article li {
  Sidebar
  --------------------------------------------------------------*/
 
-#sidebar .sidebar-node > h3 {
-  border-bottom: 1px dashed #CCC;
-  font: bold 14px "lucidamac bold", "lucida grande", verdana, arial, helvetica, sans-serif;
-  margin: 0 0 10px 0;
-  padding: 10px 0;
+#sidebar dt {
+  font-weight: bold;
 }
 
-#sidebar .sidebar-node > h3 > a:link,
-#sidebar .sidebar-node > h3 > a:visited {
-  color: #000;
-  text-decoration: none;
-}
-
-#sidebar .sidebar-node > h3 > a:hover,
-#sidebar .sidebar-node > h3 > a:active {
-  color: #000;
-  text-decoration: underline;
+#sidebar dd {
+  margin-bottom: 10px;
 }
 
 #sidebar p {
@@ -179,18 +174,5 @@ article li {
 }
 
 #footer p {
-  width: 20%;
-  float: left; 
   margin: 0; padding: 0; 
-}
-
-#footer ul {
-  width: 75%;
-  list-style-type: none; 
-  text-align: right; 
-  float: right; 
-}
-
-#footer li {
-  padding: 0 0 0 1em;
 }
