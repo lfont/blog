@@ -3,58 +3,48 @@
  *
  * #container
  *   #header
- *   #page
- *     #content
+ *   #main
+ *     #page
  *     #sidebar
  *   #footer
  */
 body {
-  text-align: left;
+    text-align: left;
 }
 
 #container {
-  margin: 80px 5%;
-  text-align: left;
+    margin: 80px 5%;
 }
 
 #header {
-  z-index: 100;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 50px;
-  overflow: hidden;
-  margin: 0; padding: 0;
+    z-index: 100;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 50px;
+    overflow: hidden;
 }
 
 #page {
-  float: left;
-  width: 65%;
-  margin-right: 5%;
-  max-width: 800px;
-  position: relative;
-  z-index: 50;
-}
-
-article {
-  float: left;
-  width: 100%;
-  text-align: left;
-  margin-bottom: 20px;
+    float: left;
+    width: 65%;
+    margin-right: 5%;
+    max-width: 800px;
+    position: relative;
+    z-index: 50;
 }
 
 #sidebar {
-  text-align: left;
-  float: left;
-  width: 30%;
-  position: relative;
-  z-index: 49;
-  max-width: 430px;
+    float: left;
+    width: 30%;
+    position: relative;
+    z-index: 49;
+    max-width: 430px;
 }
 
 #footer {
-  height: 40px; 
-  clear: both;
-  padding: 10px 0 0 0;
+    height: 40px; 
+    clear: both;
+    padding-top: 10px;
 }

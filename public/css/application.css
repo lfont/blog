@@ -8,37 +8,37 @@
 @import 'highlight/github.css';
 
 @media print {
-  #page {
-    width: 100%;
-  }
+    #page {
+        width: 100%;
+    }
 
-  #sidebar {
-    display: none;
-  }
+    #sidebar {
+        display: none;
+    }
 }
 
 @media screen and (max-width: 800px) {
-  #page {
-    width: 100%;
-    float: none;
-  }
+    #page {
+        width: 100%;
+        float: none;
+    }
 
-  #sidebar {
-    float: none;
-    max-width: none;
-    width: auto;
-  }
+    #sidebar {
+        float: none;
+        max-width: none;
+        width: auto;
+    }
 }
 
 * {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  background-image: url(../../images/theme/groovepaper.png);
-  font: normal 12px "lucida grande", verdana, sans-serif;
-  line-height: 1.4em;
+    background-image: url(../../images/theme/groovepaper.png);
+    font: normal 12px "lucida grande", verdana, sans-serif;
+    line-height: 1.4em;
 }
 
 input,
@@ -54,9 +54,9 @@ a:hover, a:active  { color: #005580; text-decoration: underline; }
 
 /* http://longren.org/2006/09/27/wrapping-text-inside-pre-tags */
 pre {
-  white-space: pre-wrap;
-  white-space: -moz-pre-wrap !important;
-  white-space: -pre-wrap;
-  white-space: -o-pre-wrap;
-  word-wrap: break-word;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap !important;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
 }
