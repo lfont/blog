@@ -13,11 +13,7 @@
     -webkit-box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.10), inset 0px -1px 0px rgba(255, 255, 255, 0.20);
        -moz-box-shadow: 0px 10px 10px rgba(0,0,0,0.10), inset 0px -1px 0px rgba(255,255,255,0.20);
             box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.10), inset 0px -1px 0px rgba(255, 255, 255, 0.20);
-}
-
-#header h1 {
     font-family: georgia, serif;
-    font-size: 38px;
     font-weight: bold;
     letter-spacing: -1px;
 }
@@ -25,9 +21,7 @@
 #header a {
     color: white;
     text-decoration: none;
-    position: relative;
-    top: 15px;
-    left: 10px;
+    cursor: pointer;
 }
 
 /*--------------------------------------------------------------
