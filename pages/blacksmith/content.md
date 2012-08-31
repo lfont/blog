@@ -4,18 +4,20 @@ That means that all the pages of this blog are just static files...
 Static is good
 --------------
 
-Some of you can ask themself why use static files in 2012?   
+Some of you can ask themselves why use static files in 2012?   
 In fact, static files have some great advantages:
 
 - This site can be hosted everywhere.
 - This site is very fast.
 - It is really simple to administrate.
 
-So for all these reasons and also because Blacksmith is quite easy to customize made me choose this solution.   
-This blog has some fixes that are not in the master branch of Blacksmith for the moment:
+So for all these reasons and also because Blacksmith is quite easy to customize, I choose this solution.   
+This blog has some fixes which are not in the master branch of Blacksmith for the moment. These fixes are:
 
 - ToC exceptions.
 - ToC HTML structure fix.
 - ToC content fix.
 
-But all these fixes are available in my [Blacksmith branch](https://github.com/lfont/blacksmith).
+But there are all available in [my Blacksmith branch](https://github.com/lfont/blacksmith).   
+
+EDIT: I found a bug with the restitution of the doctype in Blacksmith. I have [a quick and dirty fix](https://github.com/lfont/blacksmith/tree/fix-doctype) that force the HTML 5 doctype. I will push a better fix in a near future.

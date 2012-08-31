@@ -1,5 +1,5 @@
-[drawing](https://github.com/lfont/drawing) is little JavaScript library for drawing shape on a canvas.    
-It has a very simple API and has these features:
+[drawing](https://github.com/lfont/drawing) is little JavaScript library for drawing shapes on a canvas.    
+It has a very simple API and these features:
 
 - Draw square, circle, line, free (pencil).
 - Background color.
@@ -17,4 +17,4 @@ By default, the API allows you to draw by x/y coordinates but a plugin (drawing.
         eventShapeDrawer.draw("line");
     });
 
-This library is the core of the [WebPaint](/webpaint) app.
+This library is the core of [WebPaint](/webpaint).
