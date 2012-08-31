@@ -30,24 +30,36 @@
 
                 <div id="sidebar">
                     <div class="sidebar-node author">
-                        <h3>About This Author</h3>
+                        <h3>About the author</h3>
                         <img class="if-gravatar gravatar" />
                         <dl>
                             <dt>Name: </dt>
                             <dd class="name">John Doe</dd>
                         </dl>
                         <dl class="if-github">
-                            <dt>Github: </dt>
+                            <dt>GitHub: </dt>
                             <dd class="github">johnd</dd>
                         </dl>
                         <dl class="if-twitter">
                             <dt>Twitter: </dt>
                             <dd id="twitterUserName" class="twitter">johnd</dd>
                         </dl>
+                        <dl class="if-location">
+                            <dt>Location: </dt>
+                            <dd class="location">Paris, France</dd>
+                        </dl>
+                        <dl class="if-bio">
+                            <dt>Bio: </dt>
+                            <dd class="bio"></dd>
+                        </dl>
                     </div>
 
                     <div class="sidebar-node if-date">
-                        <h3>About This Article</h3>
+                        <h3>About this article</h3>
+                        <div class="if-twitter">
+                            <a href="https://twitter.com/share" class="twitter-share-button" data-via="loic_fontaine">Tweet</a>
+                            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                        </div>
                         <dl>
                             <dt>Publish Date: </dt>
                             <dd class="date"></dd>
@@ -55,12 +67,12 @@
                     </div>
                     
                     <div class="sidebar-node if-byThisAuthor">
-                        <h3>More Articles By This Author</h3>
+                        <h3>Also by this author</h3>
                         <nav class="byThisAuthor"></nav>
                     </div>
 
                     <div class="sidebar-node if-twitter">
-                        <h3>More News By This Author</h3>
+                        <h3>More news by this author</h3>
                         <script src="http://widgets.twimg.com/j/2/widget.js"></script>
                         <script>
                             (function () {
