@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="/css/application.css" type="text/css" media="all" />
         <link rel="stylesheet" href="/css/blacksmith.css" type="text/css" />
         <script src="/js/modernizr.custom.js"></script>
+        <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
     </head>
     <body>
         <div id="container">
@@ -46,6 +47,22 @@ jQuery(<span class="function"><span class="keyword">function</span> <span class=
 });</code></pre>
 <p>This library is the core of <a href="/webpaint">WebPaint</a>.</p>
 </div>
+                        <div id="disqus_thread"></div>
+                        <script type="text/javascript">
+                            jQuery(function ($) {
+                                var disqus_shortname = 'lfontblog',
+                                    disqus_identifier = '/' +
+                                                        $('.sidebar-node .date').text() +
+                                                        '/' +
+                                                        $('.article .title').text();
+
+                                (function() {
+                                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                                    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                                })();
+                            });
+                        </script>
                     </article>
                 </div>
 
@@ -79,7 +96,9 @@ jQuery(<span class="function"><span class="keyword">function</span> <span class=
                         <h3>About this article</h3>
                         <div class="if-twitter">
                             <a href="https://twitter.com/share" class="twitter-share-button" data-via="loic_fontaine">Tweet</a>
-                            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                            <script>
+                                !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+                            </script>
                         </div>
                         <dl>
                             <dt>Publish Date: </dt>

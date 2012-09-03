@@ -144,3 +144,12 @@ article .readMore {
 }
 
 /* End: Twitter bootstrap */
+
+/* Start: DISQUS */
+
+#disqus_thread {
+    border-top: 1px dashed #CCC;
+    padding: 10px 20px;
+}
+
+/* End: DISQUS */
