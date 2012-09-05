@@ -2,20 +2,21 @@
   "author": "Loïc Fontaine <ljph.fontaine@gmail.com>",
   "name": "blog",
   "description": "My simple blog that uses blacksmith.",
-  "version": "0.0.1-13",
+  "version": "0.0.1-15",
   "homepage": "https://github.com/lfont/blog",
   "repository": {
     "type": "git",
     "url": "git://github.com/lfont/blog.git"
   },
   "engines": {
-    "node": "*"
+    "node": "0.6.x"
   },
   "dependencies": {
-    "http-server": "0.2.x"
+    "colors": "*",
+    "http-server": "0.5.x"
   },
   "scripts": {
-    "start": "bin/server"
+    "start": "bin/server.js"
   },
   "subdomain": "lfont.blog"
 }

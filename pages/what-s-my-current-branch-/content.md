@@ -18,7 +18,7 @@ If like me you like to have all these shinny colors in your terminal:
     force_color_prompt=yes
 
     # Set the colored PS1
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " (%s)")
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[33m$(__git_ps1 " (%s)")\033[0m\]
     $ '
 
 Note the like break before the "$", when the prompt is very long I like not having my command on more than one line. Feel free to remove it if you don't like it.
