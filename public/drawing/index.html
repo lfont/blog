@@ -6,7 +6,7 @@
         <meta name="keywords" content="javascript,c#,code" />
         <meta name="viewport" content="width=device-width" />
         <title>drawing - lfont's blog</title>
-        <link rel="icon" type="image/png" href="images/favicon.png" />
+        <link rel="icon" type="image/png" href="/images/favicon.png" />
         <link rel="stylesheet" href="/css/application.css" type="text/css" media="all" />
         <link rel="stylesheet" href="/css/blacksmith.css" type="text/css" />
         <script src="/js/modernizr.custom.js"></script>
@@ -24,7 +24,7 @@
             <div id="main" class="metadata">
                 <div id="page">
                     <article class="article">
-                        <h1 class="title"><a href="./drawing">drawing</a></h1>
+                        <h1 class="title"><a href="/drawing">drawing</a></h1>
                         <div class="content"><p><a href="https://github.com/lfont/drawing">drawing</a> is little JavaScript library for drawing shapes on a canvas.<br />It has a very simple API and these features:
 
 </p>
@@ -80,7 +80,7 @@ jQuery(<span class="function"><span class="keyword">function</span> <span class=
                         </dl>
                         <dl class="if-twitter">
                             <dt>Twitter: </dt>
-                            <dd id="twitterUserName" class="twitter"><a href="https://twitter.com/loic_fontaine">loic_fontaine</a></dd>
+                            <dd class="twitter"><a href="https://twitter.com/loic_fontaine">loic_fontaine</a></dd>
                         </dl>
                         <dl class="if-location">
                             <dt>Location: </dt>
@@ -115,8 +115,8 @@ jQuery(<span class="function"><span class="keyword">function</span> <span class=
                         <h3>More news by this author</h3>
                         <script src="http://widgets.twimg.com/j/2/widget.js"></script>
                         <script>
-                            (function () {
-                                var user = document.getElementById('twitterUserName').innerText,
+                            (function ($) {
+                                var user = $('.author .twitter').text(),
                                     widget = new TWTR.Widget({
                                         version: 2,
                                         type: 'profile',
@@ -144,7 +144,7 @@ jQuery(<span class="function"><span class="keyword">function</span> <span class=
                                     });
 
                                 widget.render().setUser(user).start();
-                            }());
+                            }(jQuery));
                         </script>
                     </div>
                 </div>
