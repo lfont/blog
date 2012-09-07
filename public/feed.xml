@@ -1,5 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[lfont's blog]]></title><description><![CDATA[My awesome blog!]]></description><link>my.blog.local</link><generator>NodeJS RSS Module</generator><lastBuildDate>Wed, 05 Sep 2012 13:23:23 GMT</lastBuildDate><atom:link href="/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[<a href="/what-s-my-current-branch-">What's my current branch?</a>]]></title><description><![CDATA[<p>Actually, I'm using <a href="http://git-scm.com">Git</a> on a Windows desktop at work and I like the default prompt that comes with the Git Bash terminal.<br />I decided to set the same configuration on my Ubuntu laptop.
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[lfont's blog]]></title><description><![CDATA[My awesome blog!]]></description><link>my.blog.local</link><generator>NodeJS RSS Module</generator><lastBuildDate>Fri, 07 Sep 2012 19:44:07 GMT</lastBuildDate><atom:link href="/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[<a href="/making-a-desktop-app-with-node">Making a desktop app with node</a>]]></title><description><![CDATA[<p>I have recently heard of <a href="http://appjs.org">AppJS</a>, a SDK to build cross-platform desktop application with HTML, CSS and Javascript. It is in an early stage of development but I decided to go one step forward to the <a href="http://appjs.org/#download">30 Second Quickstart</a> and here is what I found.
+
+</p>
+<h2>AppJS is built around Node.js and Chromium</h2>
+<p>AppJS is bundled as a node module. It creates a file server that serves your HTML files and allows you to build your UI with HTML 5 and CSS 3 by using the rendering engine of Chromium. This is really nice because you also get all the Javascript API that comes with it.<br />On the server side (I don't know if "server" is appropriate for such architecture), you have all the standard node API (Node.js =&gt; 0.8 is required) to make filesytem access, network communication, etc.
+The approach is a bit different from other alternatives like <a href="https://github.com/rogerwang/node-webkit">node-webkit</a> but I like the fact that the development is very similiar to what you do when you develop a standard Web app.
+
+</p>
+<p>Until recently, the "hello, world" example that was on the homepage of the project did not reflect the latest version of the API. I think it is preferable to look at <a href="https://github.com/appjs/appjs/tree/master/examples">the source of the examples</a> to track the API changes, since the project is being under active development.
+
+</p>
+<p>Even if the API are cross-platform I found a little difference between Ubuntu and Windows with the rendering of the example code. On Windows, the default background and font color are both black, so if you like to see the text, you must include these css rules:
+
+</p>
+<pre><code>&lt;!-- Content of the style.css file. --&gt;
+body {
+    background-color: white;
+    color: black;
+}</code></pre>
+<p>It is the same with the post handler. The response is just plain text but to see a contrasted UI, you must replace the value that is used by <code><span class="identifier"><span class="keymethods">send</span></span></code> with:
+
+</p>
+<pre><code>app.router.post(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(req, res, next)</span> {</span>
+    res.send(<span class="string">'&lt;html&gt;'</span> +
+             <span class="string">'&lt;head&gt;&lt;link rel="stylesheet" href="style.css" /&gt;&lt;/head&gt;'</span>+
+             <span class="string">'&lt;body&gt;Hey! How are you '</span> + req.post(<span class="string">'firstname'</span>) + <span class="string">'&lt;/body&gt;'</span> +
+             <span class="string">'&lt;/html&gt;'</span>);
+});</code></pre>
+<h2>AppJS API</h2>
+<p>There are not a lot of documentation of the API at this time but the code is very informative about some of the features. The <a href="https://github.com/appjs/appjs/blob/master/src/native_window/native_window.cpp">native_window.cpp</a> source code lists all the properties that you can defined when you call the <code>app.createWindow()</code> method and the properties which are used by the <code>window.frame.openDialog()</code> method.
+
+</p>
+<p>The <code>window.frame.openDialog()</code> method allows you to call some native dialog of the system. For example, if you which to open a dialog to let the user choose a file to read, you can write something like this:
+
+</p>
+<pre><code>window.frame.openDialog({
+        type: <span class="string">"open"</span>, <span class="comment">// The type of dialog (open|save|font|color)</span>
+        initialValue: <span class="string">"/home/"</span>, <span class="comment">// The initial folder</span>
+        acceptTypes: [ <span class="comment">// The type of file to open</span>
+            <span class="string">"*.log"</span>
+        ],
+        multiSelect: <span class="literal">false</span>, <span class="comment">// Allow the user to select multiple files</span>
+        dirSelect: <span class="literal">false</span> <span class="comment">// Allow the user to select a directory</span>
+    },
+    <span class="comment">// The method is async. The callback is call whith an error object and</span>
+    <span class="comment">// an array of the files paths.</span>
+    <span class="function"><span class="keyword">function</span> <span class="params">(err, files)</span> {</span>
+        <span class="keyword">if</span> (err) {
+            <span class="keyword">throw</span> err;
+        }
+
+        <span class="keyword">if</span> (files.length === <span class="number">0</span>) {
+            console.log(<span class="string">"no file chosen"</span>);
+            <span class="keyword">return</span>;
+        }
+
+        fs.readFile(files[<span class="number">0</span>], <span class="string">'UTF8'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(err, data)</span> {</span>
+            <span class="keyword">if</span> (err) {
+                <span class="keyword">throw</span> err;
+            }
+
+            <span class="comment">// Update the element with the text read from the file.</span>
+            window.document.getElementById(<span class="string">'fileContent'</span>).innerText = data;
+        });
+    });</code></pre>
+<p>Note how we can update the UI. The window object returned by the <code>app.createWindow()</code> method is an extended version of the DOM window object whose access is usually available on the UI side. So you can do DOM manipulation easily on both sides.
+
+</p>
+<h3>Attachments</h3>
+<p>You can download a zip of the <a href="/making-a-desktop-app-with-node/reading-a-file.zip">file reader example</a>.
+</p>
+]]></description><link>http://my.blog.local/making-a-desktop-app-with-node</link><guid isPermaLink="true">http://my.blog.local/making-a-desktop-app-with-node</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Fri, 07 Sep 2012 12:45:50 GMT</pubDate></item><item><title><![CDATA[<a href="/what-s-my-current-branch-">What's my current branch?</a>]]></title><description><![CDATA[<p>Actually, I'm using <a href="http://git-scm.com">Git</a> on a Windows desktop at work and I like the default prompt that comes with the Git Bash terminal.<br />I decided to set the same configuration on my Ubuntu laptop.
 
 </p>
 <h2>Displaying the current branch name on the prompt</h2>

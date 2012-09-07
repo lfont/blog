@@ -4,8 +4,8 @@
   "author": "Loïc Fontaine",
   "description": "My awesome blog!",
   "tags": [
+    "code",
     "javascript",
-    "c#",
-    "code"
+    "node"
   ]
 }

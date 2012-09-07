@@ -2,10 +2,13 @@ var colors = require('colors'),
     connect = require('connect'),
     fs = require('fs'),
 
+    // 15 minutes
+    maxAge = 1000 * 60 * 15,
+
     app = connect()
         .use(connect.logger())
         .use(connect.favicon('public/images/favicon.png'))
-        .use(connect.static('public'), { maxAge: 60000 })
+        .use(connect.static('public'), { maxAge: maxAge })
         .use(function (req, res, next) {
             // The static middleware has not replyed so it's a 404 error.
             res.statusCode = 404;
