@@ -45,7 +45,7 @@ override the configuration), the command lists all the tools that are supported.
 A supported tool can be configured with:
 
     # set up the default gui diff tool
-    $ git config --global diff.guitool <tool name>
+    $ git config --global diff.guitool TOOL_NAME
 
 When the `diff.guitool` or `diff.tool` is defined with the name of a supported 
 tool it is only possible to define the path to the tool and not a custom 

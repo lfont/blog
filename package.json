@@ -2,7 +2,7 @@
   "author": "Loïc Fontaine <ljph.fontaine@gmail.com>",
   "name": "blog",
   "description": "My simple blog that uses Blacksmith.",
-  "version": "0.0.2-5",
+  "version": "0.0.2-8",
   "homepage": "https://github.com/lfont/blog",
   "repository": {
     "type": "git",
