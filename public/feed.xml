@@ -1,5 +1,175 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[lfont's blog]]></title><description><![CDATA[My awesome blog!]]></description><link>my.blog.local</link><generator>NodeJS RSS Module</generator><lastBuildDate>Fri, 07 Sep 2012 19:44:07 GMT</lastBuildDate><atom:link href="/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[<a href="/making-a-desktop-app-with-node">Making a desktop app with node</a>]]></title><description><![CDATA[<p>I have recently heard of <a href="http://appjs.org">AppJS</a>, a SDK to build cross-platform desktop application with HTML, CSS and Javascript. It is in an early stage of development but I decided to go one step forward to the <a href="http://appjs.org/#download">30 Second Quickstart</a> and here is what I found.
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[lfont's blog]]></title><description><![CDATA[My awesome blog!]]></description><link>my.blog.local</link><generator>NodeJS RSS Module</generator><lastBuildDate>Mon, 17 Sep 2012 22:50:58 GMT</lastBuildDate><atom:link href="/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[<a href="/use-meld-with-git-on-windows">Use Meld with Git on Windows</a>]]></title><description><![CDATA[<p><a href="http://meldmerge.org/">Meld</a> is a very nice diff and merge tool written in 
+Python that works on Linux, Mac OS and Windows. There is a lot of diff and merge 
+tools out there, but Meld is every efficient for showing the difference between 
+files.
+Here are <a href="http://rvb.mytanet.de/comparing-latex-files-with-latexdiff.shtml">some screenshots</a> 
+that show the output of differents tools.<br />Setting up <a href="http://git-scm.com/">Git</a> to use an alternative diff and merge 
+tool is very easy but there is a special behavior on Windows.
+
+
+</p>
+<h2>How to run Meld on Windows</h2>
+<p>The first thing to do is to install all 
+<a href="https://live.gnome.org/Meld/Windows">the requirement</a>. Even if the page 
+recommends Python 2.6 and Meld 1.5.0, I had no issue to run Meld 1.6 on 
+top of Python 2.7.<br />As the page indicates it, it is recommanded to check PyGtkSourceView in the 
+PyGTK All-in-one installer to have useful features like line numbering and syntax 
+coloration.<br />On a Unix system one can run a graphical python application just by running the 
+Python script from the console or by clicking on it, but on Windows it is a bit 
+different. There are two solutions:
+
+</p>
+<ol>
+<li>Renaming the Meld script <code>bin/meld</code> to <code>bin/meld.pyw</code>. That tells Windows to 
+run the program as a GUI application, this is very handy because it will not 
+launch a command prompt (This is the case when the extension is .py).</li>
+<li><p>Creating a link from <code>bin/meld</code> and then edit the target 
+(Right Click / Properties) and prepend "C:\Python27\pythonw.exe" to the path of 
+the Meld script.</p>
+<p> C:\Python27\pythonw.exe C:\meld-1.6.0\bin\meld</p>
+</li>
+</ol>
+<p><code>pythonw.exe</code> should be used when you run a GUI application. It avoids a 
+command prompt from being displayed.<br />Once these steps have been done, you can run Meld like any standard Windows 
+application.
+
+
+</p>
+<h2>Configure Git to use Meld</h2>
+<p>When you run <code>git difftool -g</code> for the first time (or with <code>--prompt</code> to 
+override the configuration), the command lists all the tools that are supported. 
+A supported tool can be configured with:
+
+</p>
+<pre><code><span class="comment"># set up the default gui diff tool</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span> <span class="identifier">diff</span>.<span class="identifier">guitool</span> &amp;<span class="identifier">lt</span>;<span class="identifier">tool</span> <span class="identifier"><span class="keymethods">name</span></span>&gt;</code></pre>
+<p>When the <code>diff.guitool</code> or <code>diff.tool</code> is defined with the name of a supported 
+tool it is only possible to define the path to the tool and not a custom 
+command. If you try to define a custom command with a supported tool like Meld 
+(<code>difftool.meld.cmd</code>) you will get this kind of error:
+
+</p>
+<pre><code><span class="constant">C</span><span class="symbol">:</span>\<span class="constant">Program</span> <span class="constant">Files</span> (<span class="identifier">x86</span>)\<span class="constant">Git</span>/<span class="identifier">libexec</span>/<span class="identifier">git</span>-<span class="identifier">core</span>/<span class="identifier">mergetools</span>/<span class="identifier">meld</span><span class="symbol">:</span> <span class="identifier">line</span> <span class="number">2</span><span class="symbol">:</span> <span class="identifier">meld</span><span class="symbol">:</span> <span class="identifier">command</span> <span class="identifier"><span class="keyword">not</span></span> <span class="identifier">found</span></code></pre>
+<p>This can be confusing because on Windows, Meld is not listed as a supported 
+tool even if it actually is. So on Windows, like on Ubuntu, you only 
+have to set the Meld path. On Windows it consists in:
+
+</p>
+<pre><code><span class="comment"># set up Meld as the default gui diff tool</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span>  <span class="identifier">diff</span>.<span class="identifier">guitool</span> <span class="identifier">meld</span>
+
+<span class="comment"># set the path to Meld</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span> <span class="identifier">difftool</span>.<span class="identifier">meld</span>.<span class="identifier">path</span> <span class="constant">C</span><span class="symbol">:</span>/<span class="identifier">meld</span>-<span class="number">1.6</span>.<span class="number">0</span>/<span class="constant">Bin</span>/<span class="identifier">meld</span>.<span class="identifier">sh</span></code></pre>
+<p>The <code>meld.sh</code> is a shell script used to launch Meld. This is needed because on 
+Windows there is no equivalent for the 
+<a href="http://en.wikipedia.org/wiki/Shebang_%28Unix%29">shebang</a>. The content of this 
+script is:
+
+</p>
+<pre><code>#!<span class="regexp">/bin/</span>env bash
+C:<span class="regexp">/Python27/</span>pythonw.exe C:<span class="regexp">/meld-1.6.0/</span>bin/meld $@</code></pre>
+<p>Now, you can run
+
+</p>
+<pre><code><span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">difftool</span> -<span class="identifier">g</span></code></pre>
+<p>inside any git repository to compare files with Meld.   
+
+</p>
+<p>To remove the confirmation before each difftool invocation, use:
+
+</p>
+<pre><code><span class="comment"># disable the promt before each invocation</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span> <span class="identifier">difftool</span>.<span class="identifier">prompt</span> <span class="identifier"><span class="keyword">false</span></span></code></pre>
+<h3>Meld as a merge tool</h3>
+<p>The same simple steps can be reproduced to configure the merge tool:
+
+</p>
+<pre><code><span class="comment"># set up Meld as the default merge tool</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span>  <span class="identifier"><span class="keymethods">merge</span></span>.<span class="identifier">tool</span> <span class="identifier">meld</span>
+
+<span class="comment"># set the path to Meld</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span> <span class="identifier">mergetool</span>.<span class="identifier">meld</span>.<span class="identifier">path</span> <span class="constant">C</span><span class="symbol">:</span>/<span class="identifier">meld</span>-<span class="number">1.6</span>.<span class="number">0</span>/<span class="constant">Bin</span>/<span class="identifier">meld</span>.<span class="identifier">sh</span>    
+
+<span class="comment"># disable the promt before each invocation</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span> <span class="identifier">mergetool</span>.<span class="identifier">prompt</span> <span class="identifier"><span class="keyword">false</span></span></code></pre>
+]]></description><link>http://my.blog.local/use-meld-with-git-on-windows</link><guid isPermaLink="true">http://my.blog.local/use-meld-with-git-on-windows</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Mon, 17 Sep 2012 09:43:52 GMT</pubDate></item><item><title><![CDATA[<a href="/firefox-os-on-galaxy-nexus">Firefox OS on Galaxy Nexus</a>]]></title><description><![CDATA[<p><a href="">Firefox OS</a> a.k.a (B2G) is a mobile operating make by Mozilla.
+
+</p>
+<h2>How to install Firefox OS on your Galaxy Nexus</h2>
+<p><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Boot_to_Gecko/B2G_build_prerequisites">Build steps</a>
+
+
+</p>
+<p>Set the udev rule
+
+</p>
+<pre><code><span class="comment"># /etc/udev/rules.d/51.-android.rules</span>
+SUBSYSTEM==<span class="string">"usb"</span>, ATTRS{idVendor}==<span class="string">"04e8"</span>, ATTRS{idProduct}==<span class="string">"685c"</span>, MODE=<span class="string">"0666"</span>, GROUP=<span class="string">"plugdev"</span> <span class="comment">#Normal Galaxy Nexus</span>
+SUBSYSTEM==<span class="string">"usb"</span>, ATTRS{idVendor}==<span class="string">"04e8"</span>, ATTRS{idProduct}==<span class="string">"6860"</span>, MODE=<span class="string">"0666"</span>, GROUP=<span class="string">"plugdev"</span> <span class="comment">#Debug Galaxy Nexus</span>
+SUBSYSTEM==<span class="string">"usb"</span>, ATTRS{idVendor}==<span class="string">"18d1"</span>, ATTRS{idProduct}==<span class="string">"4e30"</span>, MODE=<span class="string">"0666"</span>, GROUP=<span class="string">"plugdev"</span> <span class="comment">#Fastboot Galaxy Nexus</span></code></pre>
+<p>Backup the system dir
+
+</p>
+<pre><code><span class="identifier">adb</span> <span class="identifier">pull</span> /<span class="identifier"><span class="keymethods">system</span></span> <span class="identifier">sytem</span></code></pre>
+<p>Do a backup of your device
+
+</p>
+<pre><code>adb backup -apk -noshared -all -nosystem -f ./20120916.ab</code></pre>
+<p>Do a backup of your SMS with SMSBackupAndResote
+
+
+</p>
+<p>Install the required packages
+
+</p>
+<pre><code><span class="identifier">apt</span>-<span class="identifier">get</span> <span class="identifier">install</span> \
+    <span class="identifier">autoconf2</span>.<span class="number">13</span> \
+    <span class="identifier">git</span> \
+    <span class="identifier">ccache</span> \
+    <span class="identifier">gcc</span>-<span class="number">4.6</span> \
+    <span class="identifier">gcc</span>-<span class="number">4.6</span>-<span class="identifier">multilib</span> \
+    <span class="identifier">g</span>++-<span class="number">4.6</span> \
+    <span class="identifier">bison</span> \
+    <span class="identifier">flex</span> \
+    <span class="identifier">lib32ncurses5</span>-<span class="identifier">dev</span> \
+    <span class="identifier">ia32</span>-<span class="identifier">libs</span> \
+    <span class="identifier">lib32z1</span>-<span class="identifier">dev</span> \
+    <span class="identifier">make</span> \
+    <span class="identifier">curl</span> \
+    <span class="identifier">bzip2</span>
+
+<span class="identifier">sudo</span> <span class="identifier">apt</span>-<span class="identifier">get</span> <span class="identifier">install</span> <span class="identifier">git</span>-<span class="identifier">core</span> <span class="identifier">gnupg</span> <span class="identifier">flex</span> <span class="identifier">bison</span> <span class="identifier">gperf</span> <span class="identifier">build</span>-<span class="identifier">essential</span> \
+    <span class="identifier"><span class="keymethods">zip</span></span> <span class="identifier">curl</span> <span class="identifier">libc6</span>-<span class="identifier">dev</span> <span class="identifier">libncurses5</span>-<span class="identifier">dev</span><span class="symbol">:<span class="identifier">i386</span></span> <span class="identifier">x11proto</span>-<span class="identifier">core</span>-<span class="identifier">dev</span> \
+    <span class="identifier">libx11</span>-<span class="identifier">dev</span><span class="symbol">:<span class="identifier">i386</span></span> <span class="identifier">libreadline6</span>-<span class="identifier">dev</span><span class="symbol">:<span class="identifier">i386</span></span> <span class="identifier">libgl1</span>-<span class="identifier">mesa</span>-<span class="identifier">glx</span><span class="symbol">:<span class="identifier">i386</span></span> \
+    <span class="identifier">libgl1</span>-<span class="identifier">mesa</span>-<span class="identifier">dev</span> <span class="identifier">g</span>++-<span class="identifier">multilib</span> <span class="identifier">mingw32</span> <span class="identifier">openjdk</span>-<span class="number">6</span>-<span class="identifier">jdk</span> <span class="identifier">tofrodos</span> \
+    <span class="identifier">python</span>-<span class="identifier">markdown</span> <span class="identifier">libxml2</span>-<span class="identifier">utils</span> <span class="identifier">xsltproc</span> <span class="identifier">zlib1g</span>-<span class="identifier">dev</span><span class="symbol">:<span class="identifier">i386</span></span>
+
+<span class="identifier">sudo</span> <span class="identifier">ln</span> -<span class="identifier">s</span> /<span class="identifier">usr</span>/<span class="identifier">lib</span>/<span class="identifier">i386</span>-<span class="identifier">linux</span>-<span class="identifier">gnu</span>/<span class="identifier">mesa</span>/<span class="constant">libGL</span>.<span class="identifier">so</span>.<span class="number">1</span> /<span class="identifier">usr</span>/<span class="identifier">lib</span>/<span class="identifier">i386</span>-<span class="identifier">linux</span>-<span class="identifier">gnu</span>/<span class="constant">libGL</span>.<span class="identifier">so</span></code></pre>
+<p>Install (Oracle Java)[<a href="https://help.ubuntu.com/community/Java#Oracle_.28Sun.29_Java_6">https://help.ubuntu.com/community/Java#Oracle_.28Sun.29_Java_6</a>]
+
+</p>
+<p>Clone the B2G repository
+
+</p>
+<pre><code><span class="identifier">git</span> <span class="identifier"><span class="keymethods">clone</span></span> <span class="identifier">https</span><span class="symbol">:</span>/<span class="regexp">/github.com/mozilla</span>-<span class="identifier">b2g</span>/<span class="constant">B2G</span>.<span class="identifier">git</span></code></pre>
+<p>Configure the B2G build system
+
+</p>
+<pre><code>./config.sh galaxy-nexus</code></pre>
+<p>Build B2G
+
+</p>
+<pre><code>CC=gcc-4.6 CXX=gcc-4.6 ./build.sh</code></pre>
+<p>Flash the system
+
+</p>
+<pre><code>./flash</code></pre>
+<p>Edit
+
+</p>
+<pre><code>/sytem/usr/keylayout/tuna-gpio-keypad.kl</code></pre>
+]]></description><link>http://my.blog.local/firefox-os-on-galaxy-nexus</link><guid isPermaLink="true">http://my.blog.local/firefox-os-on-galaxy-nexus</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Sun, 16 Sep 2012 13:03:13 GMT</pubDate></item><item><title><![CDATA[<a href="/making-a-desktop-app-with-node">Making a desktop app with node</a>]]></title><description><![CDATA[<p>I have recently heard of <a href="http://appjs.org">AppJS</a>, a SDK to build cross-platform desktop application with HTML, CSS and Javascript. It is in an early stage of development but I decided to go one step forward to the <a href="http://appjs.org/#download">30 Second Quickstart</a> and here is what I found.
 
 </p>
 <h2>AppJS is built around Node.js and Chromium</h2>
