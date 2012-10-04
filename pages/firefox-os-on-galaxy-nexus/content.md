@@ -1,35 +1,48 @@
-[Firefox OS]() a.k.a (B2G) is a mobile operating make by Mozilla.
+[Firefox OS](http://www.mozilla.org/en-US/firefoxos/) a.k.a (B2G) is a mobile operating made by Mozilla.
+The main concept of the OS is based on the fact that applications must be developped with Web standards.
+The rendering of the application is delected to the Gecko HTML engine and the SpiderMonkey JavaScript Engine like on
+the desktop version of the Firefox browser.
+Firefox OS is under active development but it is not ready for the mass market yet, but it is an Open Source project
+so we can easily get an early preview of the OS by following some simple steps.
 
 How to install Firefox OS on your Galaxy Nexus
 ----------------------------------------------
 
-[Build steps](https://developer.mozilla.org/en-US/docs/Mozilla/Boot_to_Gecko/B2G_build_prerequisites)
+The [Build steps](https://developer.mozilla.org/en-US/docs/Mozilla/Boot_to_Gecko/B2G_build_prerequisites) of
+Firefox OS are quite simple. The team behind the project has decided to support some existing devices has build target.
+The support of these devices are not at the same level of reliability. Indeed the Galaxy Nexus has a level of 3. That means
+that is possible to install the system on this device, but you are alone if you find bugs or if it lacks some features.
+By following the steps below I have been able to build the OS on Ubuntu 12.10 and get it runs on my Galaxy Nexus, but if you
+decide to give it a try, keep in mind that Firefox OS is not ready to be used as you day-to-day mobile OS.
 
+### Set the udev rules
 
-Set the udev rule
+Firefox OS use the same tools for managing the device that Android uses. We need to add some udev rules to have access
+to the device througt àdb`.
 
     # /etc/udev/rules.d/51.-android.rules
     SUBSYSTEM=="usb", ATTRS{idVendor}=="04e8", ATTRS{idProduct}=="685c", MODE="0666", GROUP="plugdev" #Normal Galaxy Nexus
     SUBSYSTEM=="usb", ATTRS{idVendor}=="04e8", ATTRS{idProduct}=="6860", MODE="0666", GROUP="plugdev" #Debug Galaxy Nexus
     SUBSYSTEM=="usb", ATTRS{idVendor}=="18d1", ATTRS{idProduct}=="4e30", MODE="0666", GROUP="plugdev" #Fastboot Galaxy Nexus
 
+Then we must restart the udev service:
 
-Backup the system dir
+    $ service udev restart
 
-    adb pull /system sytem
+### Backup the device
 
+There are a lot of chance that you want to reinstall the stock Android system, so a backup of the device can be usefull.
 
-Do a backup of your device
+    $ adb backup -apk -noshared -all -nosystem -f ./20120916.ab
 
-    adb backup -apk -noshared -all -nosystem -f ./20120916.ab
+The `adb backup` does not backup your SMS if you want to preserve them you shoud use an app like
+[SMSBackupAndResote](https://play.google.com/store/apps/details?id=com.riteshsahu.SMSBackupRestore&feature=search_result#?t=W251bGwsMSwxLDEsImNvbS5yaXRlc2hzYWh1LlNNU0JhY2t1cFJlc3RvcmUiXQ..).
 
+### Install the required packages
 
-Do a backup of your SMS with SMSBackupAndResote
+For building the Firefox OS source code you must install the following packages:
 
-
-Install the required packages
-
-    apt-get install \
+    $ sudo apt-get install \
         autoconf2.13 \
         git \
         ccache \
@@ -48,70 +61,78 @@ Install the required packages
         zip \
         openjdk-6-jdk
 
+### Clone the B2G repository
 
-Update alternatives
-
-update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.7 100
-update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.6 50
-update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.7 100
-update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.6 50
-update-alternatives --install /usr/bin/cpp cpp-bin /usr/bin/cpp-4.7 100
-update-alternatives --install /usr/bin/cpp cpp-bin /usr/bin/cpp-4.6 50
-update-alternatives --set g++ /usr/bin/g++-4.6
-update-alternatives --set gcc /usr/bin/gcc-4.6
-update-alternatives --set cpp-bin /usr/bin/cpp-4.6
-
-update-alternatives --auto g++
-update-alternatives --auto gcc
-update-alternatives --auto cpp-bin
-
-
-Clone the B2G repository
+Just grab the source from the GitHub repository:
 
     git clone https://github.com/mozilla-b2g/B2G.git
 
+### Configure the B2G build system
 
-Configure the B2G build system
+Now, we have to configure the build to target our Galaxy Nexus device:
 
     ./config.sh galaxy-nexus
 
+### Fix the key mapping
 
-Edit
+For instance, Firefox OS does not play well with devices that does not have physical keys.
+The ergonomy is based on the fact that a "home" button exists. One quick and dirty solution is to remap the
+volume up key to behave like a "home" button. A better, solution is probably to add a virtual button bar to Gaia, like the
+virtual button bar of Android, but this is out of scope.
 
-    B2G/device/samsung/tuna/tuna-gpio-keypad.kl
-
+    # B2G/device/samsung/tuna/tuna-gpio-keypad.kl
     key 114   VOLUME_DOWN       WAKE
     key 115   HOME              WAKE
     key 116   POWER             WAKE
 
+### Build B2G
 
-Build B2G
+Ubuntu 12.10 make use of GCC 4.7, but the source does not compile with this version of GCC because some constructs are
+not supported anymore. We can use [`update-alternatives`](http://linux.die.net/man/8/update-alternatives) to
+temporaly switch back to GCC 4.6.
 
-    ./build.sh
+First, we have to register the two version of GCC:
 
+    $ update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.7 100
+    $ update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.6 50
 
-Flash the system
+    $ update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.7 100
+    $ update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.6 50
 
-    ./flash
+    $ update-alternatives --install /usr/bin/cpp cpp-bin /usr/bin/cpp-4.7 100
+    $ update-alternatives --install /usr/bin/cpp cpp-bin /usr/bin/cpp-4.6 50
 
+Then, we can set the version of GCC to 4.6:
 
-Desktop client
---------------
+    $ update-alternatives --set g++ /usr/bin/g++-4.6
+    $ update-alternatives --set gcc /usr/bin/gcc-4.6
+    $ update-alternatives --set cpp-bin /usr/bin/cpp-4.6
 
-http://ftp.mozilla.org/pub/mozilla.org/b2g/nightly/latest-mozilla-central/
+Let's build the code:
 
-    cd B2G/gaia
-    make
+    $ ./build.sh
 
+After the build, we can restore the default version of GCC by executing the following commands:
 
-Testing
+    $ update-alternatives --auto g++
+    $ update-alternatives --auto gcc
+    $ update-alternatives --auto cpp-bin
 
-https://developer.mozilla.org/en-US/docs/Mozilla/Boot_to_Gecko/Using_the_B2G_desktop_client#Running_the_desktop_client
+### Flash the system
 
-    b2g -profile B2G/gaia/profile
+The `flash` script manage all the steps neccessary to flash the OS to the device. Unlocking the bootloader of the device
+is one of these steps. If your device has a locked bootloader it will be unlocked. Take care that unlocking the bootloader
+will wipe all data of your device, including the the content of `/mnt/sdcard`!
 
+    $ ./flash
 
-Rendering problems
+### Switch back to Android
 
-    gaia/profile/user.js
-    user_pref("layers.acceleration.disabled", true);
+To reinstall Android on your device you can use one of the
+[factory images](https://developers.google.com/android/nexus/images#mysid).
+
+    $ ./flash-all.sh
+
+Then restore the backup made by `adb`. Do not forget to re-enable the USB debug mode:
+
+    $ adb restore ./20120916.ab
