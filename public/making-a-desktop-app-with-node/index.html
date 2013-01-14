@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="description" content="lfont a blog about my vision of development." />
+        <meta name="keywords" content="html5,desktop,application,code,javascript,node" />
+        <meta name="viewport" content="width=device-width" />
+        <title>Making a desktop app with node - lfont's blog</title>
+        <link rel="icon" type="image/png" href="/images/favicon.png" />
+        <link rel="stylesheet" href="/css/application.css" type="text/css" media="all" />
+        <link rel="stylesheet" href="/css/blacksmith.css" type="text/css" />
+        <script src="/js/modernizr.custom.js"></script>
+        <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    </head>
+    <body>
+        <div id="container">
+            <header id="header">
+                <a href="/">
+                    <div class="title">lfont's blog</div>
+                    <div class="tagline">The vision of a developer</div>
+                </a>
+            </header>
+
+            <div id="main" class="metadata">
+                <div id="page">
+                    <article class="article">
+                        <h1 class="title"><a href="/making-a-desktop-app-with-node">Making a desktop app with node</a></h1>
+                        <div class="content"><p>I have recently heard of <a href="http://appjs.org">AppJS</a>, a SDK to build cross-platform desktop application with HTML, CSS and Javascript. It is in an early stage of development but I decided to go one step forward to the <a href="http://appjs.org/#download">30 Second Quickstart</a> and here is what I found.
+
+</p>
+<h2>AppJS is built around Node.js and Chromium</h2>
+<p>AppJS is bundled as a node module. It creates a file server that serves your HTML files and allows you to build your UI with HTML 5 and CSS 3 by using the rendering engine of Chromium. This is really nice because you also get all the Javascript API that comes with it.<br />On the server side (I don't know if "server" is appropriate for such architecture), you have all the standard node API (Node.js =&gt; 0.8 is required) to make filesytem access, network communication, etc.
+The approach is a bit different from other alternatives like <a href="https://github.com/rogerwang/node-webkit">node-webkit</a> but I like the fact that the development is very similiar to what you do when you develop a standard Web app.
+
+</p>
+<p>Until recently, the "hello, world" example that was on the homepage of the project did not reflect the latest version of the API. I think it is preferable to look at <a href="https://github.com/appjs/appjs/tree/master/examples">the source of the examples</a> to track the API changes, since the project is being under active development.
+
+</p>
+<p>Even if the API are cross-platform I found a little difference between Ubuntu and Windows with the rendering of the example code. On Windows, the default background and font color are both black, so if you like to see the text, you must include these css rules:
+
+</p>
+<pre><code>&lt;!-- Content of the style.css file. --&gt;
+body {
+    background-color: white;
+    color: black;
+}</code></pre>
+<p>It is the same with the post handler. The response is just plain text but to see a contrasted UI, you must replace the value that is used by <code><span class="identifier"><span class="keymethods">send</span></span></code> with:
+
+</p>
+<pre><code>app.router.post(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(req, res, next)</span> {</span>
+    res.send(<span class="string">'&lt;html&gt;'</span> +
+             <span class="string">'&lt;head&gt;&lt;link rel="stylesheet" href="style.css" /&gt;&lt;/head&gt;'</span>+
+             <span class="string">'&lt;body&gt;Hey! How are you '</span> + req.post(<span class="string">'firstname'</span>) + <span class="string">'&lt;/body&gt;'</span> +
+             <span class="string">'&lt;/html&gt;'</span>);
+});</code></pre>
+<h2>AppJS API</h2>
+<p>There are not a lot of documentation of the API at this time but the code is very informative about some of the features. The <a href="https://github.com/appjs/appjs/blob/master/src/native_window/native_window.cpp">native_window.cpp</a> source code lists all the properties that you can defined when you call the <code>app.createWindow()</code> method and the properties which are used by the <code>window.frame.openDialog()</code> method.
+
+</p>
+<p>The <code>window.frame.openDialog()</code> method allows you to call some native dialog of the system. For example, if you which to open a dialog to let the user choose a file to read, you can write something like this:
+
+</p>
+<pre><code>window.frame.openDialog({
+        type: <span class="string">"open"</span>, <span class="comment">// The type of dialog (open|save|font|color)</span>
+        initialValue: <span class="string">"/home/"</span>, <span class="comment">// The initial folder</span>
+        acceptTypes: [ <span class="comment">// The type of file to open</span>
+            <span class="string">"*.log"</span>
+        ],
+        multiSelect: <span class="literal">false</span>, <span class="comment">// Allow the user to select multiple files</span>
+        dirSelect: <span class="literal">false</span> <span class="comment">// Allow the user to select a directory</span>
+    },
+    <span class="comment">// The method is async. The callback is call whith an error object and</span>
+    <span class="comment">// an array of the files paths.</span>
+    <span class="function"><span class="keyword">function</span> <span class="params">(err, files)</span> {</span>
+        <span class="keyword">if</span> (err) {
+            <span class="keyword">throw</span> err;
+        }
+
+        <span class="keyword">if</span> (files.length === <span class="number">0</span>) {
+            console.log(<span class="string">"no file chosen"</span>);
+            <span class="keyword">return</span>;
+        }
+
+        fs.readFile(files[<span class="number">0</span>], <span class="string">'UTF8'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(err, data)</span> {</span>
+            <span class="keyword">if</span> (err) {
+                <span class="keyword">throw</span> err;
+            }
+
+            <span class="comment">// Update the element with the text read from the file.</span>
+            window.document.getElementById(<span class="string">'fileContent'</span>).innerText = data;
+        });
+    });</code></pre>
+<p>Note how we can update the UI. The window object returned by the <code>app.createWindow()</code> method is an extended version of the DOM window object whose access is usually available on the UI side. So you can do DOM manipulation easily on both sides.
+
+</p>
+<h3>Attachments</h3>
+<p>You can download a zip of the <a href="/making-a-desktop-app-with-node/reading-a-file.zip">file reader example</a>.
+</p>
+</div>
+                        <div id="disqus_thread"></div>
+                        <script type="text/javascript">
+                            jQuery(function ($) {
+                                var disqus_shortname = 'lfontblog',
+                                    disqus_identifier = '/' +
+                                                        $('.sidebar-node .date').text() +
+                                                        '/' +
+                                                        $('.article .title').text();
+
+                                (function() {
+                                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                                    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                                })();
+                            });
+                        </script>
+                    </article>
+                </div>
+
+                <div id="sidebar">
+                    <div class="sidebar-node author">
+                        <h3>About the author</h3>
+                        <img class="if-gravatar gravatar" src="http://www.gravatar.com/avatar/34619a8ae564c2e0ce2998df24583fb1?r=pg&amp;s=200.jpg&amp;d=identicon" />
+                        <dl>
+                            <dt>Name: </dt>
+                            <dd class="name">Loïc Fontaine</dd>
+                        </dl>
+                        <dl class="if-github">
+                            <dt>GitHub: </dt>
+                            <dd class="github"><a href="https://github.com/lfont">lfont</a></dd>
+                        </dl>
+                        <dl class="if-twitter">
+                            <dt>Twitter: </dt>
+                            <dd class="twitter"><a href="https://twitter.com/loic_fontaine">loic_fontaine</a></dd>
+                        </dl>
+                        <dl class="if-location">
+                            <dt>Location: </dt>
+                            <dd class="location">Paris, France</dd>
+                        </dl>
+                        <dl class="if-bio">
+                            <dt>Bio: </dt>
+                            <dd class="bio">I am a developer passionate about the Web, Unix and a great lover of the JavaScript language.</dd>
+                        </dl>
+                    </div>
+
+                    <div class="sidebar-node if-date">
+                        <h3>About this article</h3>
+                        <div class="if-twitter">
+                            <a href="https://twitter.com/share" class="twitter-share-button" data-via="loic_fontaine">Tweet</a>
+                            <script>
+                                !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+                            </script>
+                        </div>
+                        <dl>
+                            <dt>Publish Date: </dt>
+                            <dd class="date">Friday, Sep 7 2012</dd>
+                        </dl>
+                    </div>
+                    
+                    <div class="sidebar-node if-byThisAuthor">
+                        <h3>Also by this author</h3>
+                        <nav class="byThisAuthor"><ul><li><a href="/firefox-os-on-galaxy-nexus">firefox os on galaxy nexus</a></li><li><a href="/use-meld-with-git-on-windows">use meld with git on windows</a></li><li><a href="/what-s-my-current-branch-">what s my current branch </a></li><li><a href="/blacksmith">blacksmith</a></li><li><a href="/hello-world">hello world</a></li></ul></nav>
+                    </div>
+
+                    <div class="sidebar-node if-twitter">
+                        <h3>More news by this author</h3>
+                        <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+                        <script>
+                            (function ($) {
+                                var user = $('.author .twitter').text(),
+                                    widget = new TWTR.Widget({
+                                        version: 2,
+                                        type: 'profile',
+                                        rpp: 4,
+                                        interval: 30000,
+                                        width: 'auto',
+                                        height: 250,
+                                        theme: {
+                                            shell: {
+                                                background: '#303030',
+                                                color: '#ffffff'
+                                            },
+                                            tweets: {
+                                                background: '#f5f5f5',
+                                                color: '#000000',
+                                                links: '#0080c0'
+                                            }
+                                        },
+                                        features: {
+                                            scrollbar: false,
+                                            loop: false,
+                                            live: true,
+                                            behavior: 'all'
+                                        }
+                                    });
+
+                                widget.render().setUser(user).start();
+                            }(jQuery));
+                        </script>
+                    </div>
+                </div>
+            </div>
+
+            <footer id="footer">
+                <p>© 2012 Loïc Fontaine</p>
+                <p>Articles are licensed under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>. All code snippets used in the examples are in the public domain.</p>
+                <p>Styled with a modified version of <a href="http://quotedprintable.com/pages/scribbish">scribbish</a> inspired by the theme of <a href="http://howtonode.org">HowToNode.org</a></p>
+                <p>Powered by <a href="http://nodejitsu.com">Nodejitsu</a> / generated by <a href="http://blacksmith.jit.su">Blacksmith</a></p>
+            </footer>
+        </div>
+        
+        <script>
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-34256671-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var ss = document.getElementsByTagName('script');
+                var s = ss[ss.length - 1]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    </body>
+</html>

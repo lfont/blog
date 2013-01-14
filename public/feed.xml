@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[lfont's blog]]></title><description><![CDATA[My awesome blog!]]></description><link>my.blog.local</link><generator>NodeJS RSS Module</generator><lastBuildDate>Mon, 14 Jan 2013 20:00:16 GMT</lastBuildDate><atom:link href="/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[<a href="/firefox-os-on-galaxy-nexus">Firefox OS on Galaxy Nexus</a>]]></title><description><![CDATA[<p><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS">Firefox OS</a> a.k.a 
+(B2G) is a mobile operating system made by Mozilla. The main concept of the OS is 
+based on the fact that applications are developed with Web standards.<br />Firefox OS shares a lot of components with the Firefox browser. The applications 
+are running on top of the same Gecko engine, but Firefox OS uses a custom user 
+interface called <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Gaia">Gaia</a> 
+that is more suitable for mobile devices.<br />Firefox OS is under active development but it is not ready for the mass market 
+yet. Fortunately, it is an Open Source project so we can easily get an early preview of 
+the OS by following some simple steps.
+
+</p>
+<h2>How to install Firefox OS on a Galaxy Nexus</h2>
+<p>The <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Boot_to_Gecko/B2G_build_prerequisites">Build steps</a> 
+of Firefox OS are quite simple. The team behind the project has decided to 
+support some existing devices as build targets.<br />The support of these devices are not at the same level of reliability. Indeed 
+the Galaxy Nexus has a level of 3. That means that is possible to install the 
+system on this device, but you are alone if you find bugs or if it lacks some 
+features.<br />By following the steps below I have been able to build the OS on Ubuntu 12.10 
+and get it run on my Galaxy Nexus. If you decide to give it a try, keep in 
+mind that Firefox OS is not ready to be used as your day-to-day mobile OS.
+
+</p>
+<h3>Set the udev rules</h3>
+<p>Firefox OS uses the same tools as Android to manage the devices. We need to add some udev rules to have access to the device through <code>adb</code>.
+
+</p>
+<pre><code><span class="comment"># /etc/udev/rules.d/51.-android.rules</span>
+SUBSYSTEM==<span class="string">"usb"</span>, ATTRS{idVendor}==<span class="string">"04e8"</span>, ATTRS{idProduct}==<span class="string">"685c"</span>, MODE=<span class="string">"0666"</span>, GROUP=<span class="string">"plugdev"</span> <span class="comment">#Normal Galaxy Nexus</span>
+SUBSYSTEM==<span class="string">"usb"</span>, ATTRS{idVendor}==<span class="string">"04e8"</span>, ATTRS{idProduct}==<span class="string">"6860"</span>, MODE=<span class="string">"0666"</span>, GROUP=<span class="string">"plugdev"</span> <span class="comment">#Debug Galaxy Nexus</span>
+SUBSYSTEM==<span class="string">"usb"</span>, ATTRS{idVendor}==<span class="string">"18d1"</span>, ATTRS{idProduct}==<span class="string">"4e30"</span>, MODE=<span class="string">"0666"</span>, GROUP=<span class="string">"plugdev"</span> <span class="comment">#Fastboot Galaxy Nexus</span></code></pre>
+<p>Then we must restart the udev service:
+
+</p>
+<pre><code><span class="variable">$ </span><span class="identifier">service</span> <span class="identifier">udev</span> <span class="identifier">restart</span></code></pre>
+<h3>Backup the device</h3>
+<p>There are a lot of chance that you want to reinstall the stock Android system, 
+so a backup of the device can be useful. Before running the <code>adb</code> command, you have to check if your device is in the USB debug mode.
+
+</p>
+<pre><code>$ adb backup -apk -noshared -all -nosystem -f ./20120916.ab</code></pre>
+<p>The <code>adb backup</code> does not backup your SMS, if you want to preserve them you should
+use an app like <a href="https://play.google.com/store/apps/details?id=com.riteshsahu.SMSBackupRestore&amp;feature=search_result#?t=W251bGwsMSwxLDEsImNvbS5yaXRlc2hzYWh1LlNNU0JhY2t1cFJlc3RvcmUiXQ..">SMSBackupAndResote</a>.
+
+</p>
+<h3>Install the required packages</h3>
+<p>To build the Firefox OS source code, you must install the following packages:
+
+</p>
+<pre><code><span class="variable">$ </span><span class="identifier">sudo</span> <span class="identifier">apt</span>-<span class="identifier">get</span> <span class="identifier">install</span> \
+    <span class="identifier">autoconf2</span>.<span class="number">13</span> \
+    <span class="identifier">git</span> \
+    <span class="identifier">ccache</span> \
+    <span class="identifier">gcc</span> \
+    <span class="identifier">g</span>++ \
+    <span class="identifier">gcc</span>-<span class="number">4.6</span> \
+    <span class="identifier">g</span>++-<span class="number">4.6</span> \
+    <span class="identifier">g</span>++-<span class="number">4.6</span>-<span class="identifier">multilib</span> \
+    <span class="identifier">bison</span> \
+    <span class="identifier">flex</span> \
+    <span class="identifier">lib32ncurses5</span>-<span class="identifier">dev</span> \
+    <span class="identifier">ia32</span>-<span class="identifier">libs</span> \
+    <span class="identifier">lib32z1</span>-<span class="identifier">dev</span> \
+    <span class="identifier">make</span> \
+    <span class="identifier">curl</span> \
+    <span class="identifier"><span class="keymethods">zip</span></span> \
+    <span class="identifier">openjdk</span>-<span class="number">6</span>-<span class="identifier">jdk</span></code></pre>
+<h3>Clone the B2G repository</h3>
+<p>Just grab the source from the GitHub repository:
+
+</p>
+<pre><code><span class="identifier">git</span> <span class="identifier"><span class="keymethods">clone</span></span> <span class="identifier">https</span><span class="symbol">:</span>/<span class="regexp">/github.com/mozilla</span>-<span class="identifier">b2g</span>/<span class="constant">B2G</span>.<span class="identifier">git</span></code></pre>
+<h3>Configure the B2G build system</h3>
+<p>Now, we have to configure the build to target our Galaxy Nexus device:
+
+</p>
+<pre><code>./config.sh galaxy-nexus</code></pre>
+<h3>Fix the key mapping</h3>
+<p>For instance, Firefox OS does not play well with devices that do not have 
+physical keys. The ergonomy is based on the fact that a "home" button exists.<br />One quick and dirty solution is to remap the volume up key to behave like a 
+"home" button. A better solution is probably to add a virtual button bar to 
+Gaia, like the virtual button bar of Android, but this is out of scope for this
+article.
+
+</p>
+<pre><code><span class="comment"># B2G/device/samsung/tuna/tuna-gpio-keypad.kl</span>
+key <span class="number">114</span>   VOLUME_DOWN       WAKE
+key <span class="number">115</span>   HOME              WAKE
+key <span class="number">116</span>   POWER             WAKE</code></pre>
+<h3>Build B2G</h3>
+<p>Ubuntu 12.10 makes use of GCC 4.7, but the source does not compile with this 
+version of GCC because some constructs are not supported anymore. We can use 
+<a href="http://linux.die.net/man/8/update-alternatives"><code><span class="identifier"><span class="keymethods">update</span></span>-<span class="identifier">alternatives</span></code></a> to
+temporaly switch back to GCC 4.6.
+
+</p>
+<p>First, we have to register the two versions of GCC:
+
+</p>
+<pre><code>$ update-alternatives --install /usr/bin/g++ g++ <span class="regexp">/usr/</span>bin/g++-<span class="number">4.7</span> <span class="number">100</span>
+$ update-alternatives --install /usr/bin/g++ g++ <span class="regexp">/usr/</span>bin/g++-<span class="number">4.6</span> <span class="number">50</span>
+
+$ update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-<span class="number">4.7</span> <span class="number">100</span>
+$ update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-<span class="number">4.6</span> <span class="number">50</span>
+
+$ update-alternatives --install /usr/bin/cpp cpp-bin /usr/bin/cpp-<span class="number">4.7</span> <span class="number">100</span>
+$ update-alternatives --install /usr/bin/cpp cpp-bin /usr/bin/cpp-<span class="number">4.6</span> <span class="number">50</span></code></pre>
+<p>Then, we can set the version of GCC to 4.6:
+
+</p>
+<pre><code>$ update-alternatives --<span class="keyword">set</span> g++ /usr/bin/g++-<span class="number">4.6</span>
+$ update-alternatives --<span class="keyword">set</span> gcc /usr/bin/gcc-<span class="number">4.6</span>
+$ update-alternatives --<span class="keyword">set</span> cpp-bin /usr/bin/cpp-<span class="number">4.6</span></code></pre>
+<p>Let's build the code:
+
+</p>
+<pre><code>$ ./build.sh</code></pre>
+<p>After the build, we can restore the default version of GCC by executing the 
+following commands:
+
+</p>
+<pre><code><span class="variable">$ </span><span class="identifier"><span class="keymethods">update</span></span>-<span class="identifier">alternatives</span> --<span class="identifier">auto</span> <span class="identifier">g</span>++
+<span class="variable">$ </span><span class="identifier"><span class="keymethods">update</span></span>-<span class="identifier">alternatives</span> --<span class="identifier">auto</span> <span class="identifier">gcc</span>
+<span class="variable">$ </span><span class="identifier"><span class="keymethods">update</span></span>-<span class="identifier">alternatives</span> --<span class="identifier">auto</span> <span class="identifier">cpp</span>-<span class="identifier">bin</span></code></pre>
+<h3>Flash the system</h3>
+<p>The <code>flash</code> script manages all the necessary steps to flash the OS to the 
+device. Unlocking the bootloader of the device is one of these steps.<br />If your device has a locked bootloader it will be unlocked. Take care that 
+unlocking the bootloader will wipe off all the data of your device, including the 
+content of <code>/mnt/sdcard</code>!
+
+</p>
+<pre><code>$ ./flash</code></pre>
+<p>You should now have Firefox OS up and running on your Galaxy Nexus! 
+Happy testing.
+
+</p>
+<h3>Switch back to Android</h3>
+<p>To reinstall Android on your device you can use one of the
+<a href="https://developers.google.com/android/nexus/images#mysid">factory images</a>.
+By running the following script your device will be completely restored.
+
+</p>
+<pre><code>$ ./flash-all.sh</code></pre>
+<p>Then restore the backup made by <code>adb</code>. Do not forget to re-enable the USB debug
+mode:
+
+</p>
+<pre><code>$ adb restore ./20120916.ab</code></pre>
+]]></description><link>http://my.blog.local/firefox-os-on-galaxy-nexus</link><guid isPermaLink="true">http://my.blog.local/firefox-os-on-galaxy-nexus</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Mon, 08 Oct 2012 13:03:13 GMT</pubDate></item><item><title><![CDATA[<a href="/use-meld-with-git-on-windows">Use Meld with Git on Windows</a>]]></title><description><![CDATA[<p><a href="http://meldmerge.org/">Meld</a> is a very nice diff and merge tool written in 
+Python that works on Linux, Mac OS and Windows. There is a lot of diff and merge 
+tools out there, but Meld is every efficient for showing the difference between 
+files.
+Here are <a href="http://rvb.mytanet.de/comparing-latex-files-with-latexdiff.shtml">some screenshots</a> 
+that show the output of differents tools.<br />Setting up <a href="http://git-scm.com/">Git</a> to use an alternative diff and merge 
+tool is very easy but there is a special behavior on Windows.
+
+
+</p>
+<h2>How to run Meld on Windows</h2>
+<p>The first thing to do is to install all 
+<a href="https://live.gnome.org/Meld/Windows">the requirement</a>. Even if the page 
+recommends Python 2.6 and Meld 1.5.0, I had no issue to run Meld 1.6 on 
+top of Python 2.7.<br />As the page indicates it, it is recommanded to check PyGtkSourceView in the 
+PyGTK All-in-one installer to have useful features like line numbering and syntax 
+coloration.<br />On a Unix system one can run a graphical python application just by running the 
+Python script from the console or by clicking on it, but on Windows it is a bit 
+different. There are two solutions:
+
+</p>
+<ol>
+<li>Renaming the Meld script <code>bin/meld</code> to <code>bin/meld.pyw</code>. That tells Windows to 
+run the program as a GUI application, this is very handy because it will not 
+launch a command prompt (This is the case when the extension is .py).</li>
+<li><p>Creating a link from <code>bin/meld</code> and then edit the target 
+(Right Click / Properties) and prepend "C:\Python27\pythonw.exe" to the path of 
+the Meld script.</p>
+<p> C:\Python27\pythonw.exe C:\meld-1.6.0\bin\meld</p>
+</li>
+</ol>
+<p><code>pythonw.exe</code> should be used when you run a GUI application. It avoids a 
+command prompt from being displayed.<br />Once these steps have been done, you can run Meld like any standard Windows 
+application.
+
+
+</p>
+<h2>Configure Git to use Meld</h2>
+<p>When you run <code>git difftool -g</code> for the first time (or with <code>--prompt</code> to 
+override the configuration), the command lists all the tools that are supported. 
+A supported tool can be configured with:
+
+</p>
+<pre><code><span class="comment"># set up the default gui diff tool</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span> <span class="identifier">diff</span>.<span class="identifier">guitool</span> <span class="constant">TOOL_NAME</span></code></pre>
+<p>When the <code>diff.guitool</code> or <code>diff.tool</code> is defined with the name of a supported 
+tool it is only possible to define the path to the tool and not a custom 
+command. If you try to define a custom command with a supported tool like Meld 
+(<code>difftool.meld.cmd</code>) you will get this kind of error:
+
+</p>
+<pre><code><span class="constant">C</span><span class="symbol">:</span>\<span class="constant">Program</span> <span class="constant">Files</span> (<span class="identifier">x86</span>)\<span class="constant">Git</span>/<span class="identifier">libexec</span>/<span class="identifier">git</span>-<span class="identifier">core</span>/<span class="identifier">mergetools</span>/<span class="identifier">meld</span><span class="symbol">:</span> <span class="identifier">line</span> <span class="number">2</span><span class="symbol">:</span> <span class="identifier">meld</span><span class="symbol">:</span> <span class="identifier">command</span> <span class="identifier"><span class="keyword">not</span></span> <span class="identifier">found</span></code></pre>
+<p>This can be confusing because on Windows, Meld is not listed as a supported 
+tool even if it actually is. So on Windows, like on Ubuntu, you only 
+have to set the Meld path. On Windows it consists in:
+
+</p>
+<pre><code><span class="comment"># set up Meld as the default gui diff tool</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span>  <span class="identifier">diff</span>.<span class="identifier">guitool</span> <span class="identifier">meld</span>
+
+<span class="comment"># set the path to Meld</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span> <span class="identifier">difftool</span>.<span class="identifier">meld</span>.<span class="identifier">path</span> <span class="constant">C</span><span class="symbol">:</span>/<span class="identifier">meld</span>-<span class="number">1.6</span>.<span class="number">0</span>/<span class="constant">Bin</span>/<span class="identifier">meld</span>.<span class="identifier">sh</span></code></pre>
+<p>The <code>meld.sh</code> is a shell script used to launch Meld. This is needed because on 
+Windows there is no equivalent for the 
+<a href="http://en.wikipedia.org/wiki/Shebang_%28Unix%29">shebang</a>. The content of this 
+script is:
+
+</p>
+<pre><code>#!<span class="regexp">/bin/</span>env bash
+C:<span class="regexp">/Python27/</span>pythonw.exe C:<span class="regexp">/meld-1.6.0/</span>bin/meld $@</code></pre>
+<p>Now, you can run
+
+</p>
+<pre><code><span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">difftool</span> -<span class="identifier">g</span></code></pre>
+<p>inside any git repository to compare files with Meld.   
+
+</p>
+<p>To remove the confirmation before each difftool invocation, use:
+
+</p>
+<pre><code><span class="comment"># disable the promt before each invocation</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span> <span class="identifier">difftool</span>.<span class="identifier">prompt</span> <span class="identifier"><span class="keyword">false</span></span></code></pre>
+<h3>Meld as a merge tool</h3>
+<p>The same simple steps can be reproduced to configure the merge tool:
+
+</p>
+<pre><code><span class="comment"># set up Meld as the default merge tool</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span>  <span class="identifier"><span class="keymethods">merge</span></span>.<span class="identifier">tool</span> <span class="identifier">meld</span>
+
+<span class="comment"># set the path to Meld</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span> <span class="identifier">mergetool</span>.<span class="identifier">meld</span>.<span class="identifier">path</span> <span class="constant">C</span><span class="symbol">:</span>/<span class="identifier">meld</span>-<span class="number">1.6</span>.<span class="number">0</span>/<span class="constant">Bin</span>/<span class="identifier">meld</span>.<span class="identifier">sh</span>    
+
+<span class="comment"># disable the promt before each invocation</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span> <span class="identifier">mergetool</span>.<span class="identifier">prompt</span> <span class="identifier"><span class="keyword">false</span></span></code></pre>
+]]></description><link>http://my.blog.local/use-meld-with-git-on-windows</link><guid isPermaLink="true">http://my.blog.local/use-meld-with-git-on-windows</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Mon, 17 Sep 2012 09:43:52 GMT</pubDate></item><item><title><![CDATA[<a href="/making-a-desktop-app-with-node">Making a desktop app with node</a>]]></title><description><![CDATA[<p>I have recently heard of <a href="http://appjs.org">AppJS</a>, a SDK to build cross-platform desktop application with HTML, CSS and Javascript. It is in an early stage of development but I decided to go one step forward to the <a href="http://appjs.org/#download">30 Second Quickstart</a> and here is what I found.
+
+</p>
+<h2>AppJS is built around Node.js and Chromium</h2>
+<p>AppJS is bundled as a node module. It creates a file server that serves your HTML files and allows you to build your UI with HTML 5 and CSS 3 by using the rendering engine of Chromium. This is really nice because you also get all the Javascript API that comes with it.<br />On the server side (I don't know if "server" is appropriate for such architecture), you have all the standard node API (Node.js =&gt; 0.8 is required) to make filesytem access, network communication, etc.
+The approach is a bit different from other alternatives like <a href="https://github.com/rogerwang/node-webkit">node-webkit</a> but I like the fact that the development is very similiar to what you do when you develop a standard Web app.
+
+</p>
+<p>Until recently, the "hello, world" example that was on the homepage of the project did not reflect the latest version of the API. I think it is preferable to look at <a href="https://github.com/appjs/appjs/tree/master/examples">the source of the examples</a> to track the API changes, since the project is being under active development.
+
+</p>
+<p>Even if the API are cross-platform I found a little difference between Ubuntu and Windows with the rendering of the example code. On Windows, the default background and font color are both black, so if you like to see the text, you must include these css rules:
+
+</p>
+<pre><code>&lt;!-- Content of the style.css file. --&gt;
+body {
+    background-color: white;
+    color: black;
+}</code></pre>
+<p>It is the same with the post handler. The response is just plain text but to see a contrasted UI, you must replace the value that is used by <code><span class="identifier"><span class="keymethods">send</span></span></code> with:
+
+</p>
+<pre><code>app.router.post(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(req, res, next)</span> {</span>
+    res.send(<span class="string">'&lt;html&gt;'</span> +
+             <span class="string">'&lt;head&gt;&lt;link rel="stylesheet" href="style.css" /&gt;&lt;/head&gt;'</span>+
+             <span class="string">'&lt;body&gt;Hey! How are you '</span> + req.post(<span class="string">'firstname'</span>) + <span class="string">'&lt;/body&gt;'</span> +
+             <span class="string">'&lt;/html&gt;'</span>);
+});</code></pre>
+<h2>AppJS API</h2>
+<p>There are not a lot of documentation of the API at this time but the code is very informative about some of the features. The <a href="https://github.com/appjs/appjs/blob/master/src/native_window/native_window.cpp">native_window.cpp</a> source code lists all the properties that you can defined when you call the <code>app.createWindow()</code> method and the properties which are used by the <code>window.frame.openDialog()</code> method.
+
+</p>
+<p>The <code>window.frame.openDialog()</code> method allows you to call some native dialog of the system. For example, if you which to open a dialog to let the user choose a file to read, you can write something like this:
+
+</p>
+<pre><code>window.frame.openDialog({
+        type: <span class="string">"open"</span>, <span class="comment">// The type of dialog (open|save|font|color)</span>
+        initialValue: <span class="string">"/home/"</span>, <span class="comment">// The initial folder</span>
+        acceptTypes: [ <span class="comment">// The type of file to open</span>
+            <span class="string">"*.log"</span>
+        ],
+        multiSelect: <span class="literal">false</span>, <span class="comment">// Allow the user to select multiple files</span>
+        dirSelect: <span class="literal">false</span> <span class="comment">// Allow the user to select a directory</span>
+    },
+    <span class="comment">// The method is async. The callback is call whith an error object and</span>
+    <span class="comment">// an array of the files paths.</span>
+    <span class="function"><span class="keyword">function</span> <span class="params">(err, files)</span> {</span>
+        <span class="keyword">if</span> (err) {
+            <span class="keyword">throw</span> err;
+        }
+
+        <span class="keyword">if</span> (files.length === <span class="number">0</span>) {
+            console.log(<span class="string">"no file chosen"</span>);
+            <span class="keyword">return</span>;
+        }
+
+        fs.readFile(files[<span class="number">0</span>], <span class="string">'UTF8'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(err, data)</span> {</span>
+            <span class="keyword">if</span> (err) {
+                <span class="keyword">throw</span> err;
+            }
+
+            <span class="comment">// Update the element with the text read from the file.</span>
+            window.document.getElementById(<span class="string">'fileContent'</span>).innerText = data;
+        });
+    });</code></pre>
+<p>Note how we can update the UI. The window object returned by the <code>app.createWindow()</code> method is an extended version of the DOM window object whose access is usually available on the UI side. So you can do DOM manipulation easily on both sides.
+
+</p>
+<h3>Attachments</h3>
+<p>You can download a zip of the <a href="/making-a-desktop-app-with-node/reading-a-file.zip">file reader example</a>.
+</p>
+]]></description><link>http://my.blog.local/making-a-desktop-app-with-node</link><guid isPermaLink="true">http://my.blog.local/making-a-desktop-app-with-node</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Fri, 07 Sep 2012 12:45:50 GMT</pubDate></item><item><title><![CDATA[<a href="/what-s-my-current-branch-">What's my current branch?</a>]]></title><description><![CDATA[<p>Actually, I'm using <a href="http://git-scm.com">Git</a> on a Windows desktop at work and I like the default prompt that comes with the Git Bash terminal.<br />I decided to set the same configuration on my Ubuntu laptop.
+
+</p>
+<h2>Displaying the current branch name on the prompt</h2>
+<p>This feature can easily been added by sourcing the <a href="https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh">git-prompt.sh</a> script and adding the value returned by the __get_ps1() function to the PS1 variable.   
+
+</p>
+<pre><code><span class="comment"># ~/.bashrc file</span>
+source ~/.git-prompt.sh
+PS1='<span class="variable">${debian_chroot:+($debian_chroot)}</span>\u@\h:\w$(__git_ps1 <span class="string">" (%s)"</span>)
+$ '</code></pre>
+<p>If like me you like to have all these shinny colors in your terminal:   
+
+</p>
+<pre><code><span class="comment"># ~/.bashrc file</span>
+<span class="comment"># Uncomment the following line</span>
+force_color_prompt=yes
+
+<span class="comment"># Set the colored PS1</span>
+PS1='<span class="variable">${debian_chroot:+($debian_chroot)}</span>\[\<span class="number">033</span>[<span class="number">01</span>;<span class="number">32</span>m\]\u@\h\[\<span class="number">033</span>[<span class="number">00</span>m\]:\[\<span class="number">033</span>[<span class="number">01</span>;<span class="number">34</span>m\]\w\[\<span class="number">033</span>[<span class="number">00</span>m\]\[\<span class="number">033</span>[<span class="number">33</span>m$(__git_ps1 <span class="string">" (%s)"</span>)\<span class="number">033</span>[<span class="number">0</span>m\]
+$ '</code></pre>
+<p>Note the like break before the "$", when the prompt is very long I like not having my command on more than one line. Feel free to remove it if you don't like it.</p>
+]]></description><link>http://my.blog.local/what-s-my-current-branch-</link><guid isPermaLink="true">http://my.blog.local/what-s-my-current-branch-</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Tue, 04 Sep 2012 15:58:33 GMT</pubDate></item><item><title><![CDATA[<a href="/blacksmith">Blacksmith</a>]]></title><description><![CDATA[<p>This blog is generated by <a href="http://blacksmith.jit.su/">Blacksmith</a>.<br />That means that all the pages of this blog are just static files...
+
+</p>
+<h2>Static is good</h2>
+<p>Some of you can ask themselves why use static files in 2012?<br />In fact, static files have some great advantages:
+
+</p>
+<ul>
+<li>This site can be hosted everywhere.</li>
+<li>This site is very fast.</li>
+<li>It is really simple to administrate.</li>
+</ul>
+<p>So for all these reasons and also because Blacksmith is quite easy to customize, I choose this solution.<br />This blog has some fixes which are not in the master branch of Blacksmith for the moment. These fixes are:
+
+</p>
+<ul>
+<li>ToC exceptions.</li>
+<li>ToC HTML structure fix.</li>
+<li>ToC content fix.</li>
+</ul>
+<p>But there are all available in <a href="https://github.com/lfont/blacksmith">my Blacksmith branch</a>.   
+
+</p>
+<p>EDIT: I found a bug with the restitution of the doctype in Blacksmith. I have <a href="https://github.com/lfont/blacksmith/tree/fix-doctype">a quick and dirty fix</a> that force the HTML 5 doctype. I will push a better fix in a near future.</p>
+]]></description><link>http://my.blog.local/blacksmith</link><guid isPermaLink="true">http://my.blog.local/blacksmith</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Wed, 22 Aug 2012 20:25:46 GMT</pubDate></item><item><title><![CDATA[<a href="/hello-world">hello, world</a>]]></title><description><![CDATA[<p>Hey,
+
+</p>
+<p>This is my first post on my brand new blog. There is nothing really amazing in this post.<br />Except the fact that this blog is going to be the place where I talk about my work and the stuff that make my working days fun.</p>
+]]></description><link>http://my.blog.local/hello-world</link><guid isPermaLink="true">http://my.blog.local/hello-world</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Tue, 21 Aug 2012 08:37:08 GMT</pubDate></item></channel></rss>

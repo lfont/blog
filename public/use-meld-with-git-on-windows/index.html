@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="description" content="lfont a blog about my vision of development." />
+        <meta name="keywords" content="git,diff,merge,code,javascript,node" />
+        <meta name="viewport" content="width=device-width" />
+        <title>Use Meld with Git on Windows - lfont's blog</title>
+        <link rel="icon" type="image/png" href="/images/favicon.png" />
+        <link rel="stylesheet" href="/css/application.css" type="text/css" media="all" />
+        <link rel="stylesheet" href="/css/blacksmith.css" type="text/css" />
+        <script src="/js/modernizr.custom.js"></script>
+        <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    </head>
+    <body>
+        <div id="container">
+            <header id="header">
+                <a href="/">
+                    <div class="title">lfont's blog</div>
+                    <div class="tagline">The vision of a developer</div>
+                </a>
+            </header>
+
+            <div id="main" class="metadata">
+                <div id="page">
+                    <article class="article">
+                        <h1 class="title"><a href="/use-meld-with-git-on-windows">Use Meld with Git on Windows</a></h1>
+                        <div class="content"><p><a href="http://meldmerge.org/">Meld</a> is a very nice diff and merge tool written in 
+Python that works on Linux, Mac OS and Windows. There is a lot of diff and merge 
+tools out there, but Meld is every efficient for showing the difference between 
+files.
+Here are <a href="http://rvb.mytanet.de/comparing-latex-files-with-latexdiff.shtml">some screenshots</a> 
+that show the output of differents tools.<br />Setting up <a href="http://git-scm.com/">Git</a> to use an alternative diff and merge 
+tool is very easy but there is a special behavior on Windows.
+
+
+</p>
+<h2>How to run Meld on Windows</h2>
+<p>The first thing to do is to install all 
+<a href="https://live.gnome.org/Meld/Windows">the requirement</a>. Even if the page 
+recommends Python 2.6 and Meld 1.5.0, I had no issue to run Meld 1.6 on 
+top of Python 2.7.<br />As the page indicates it, it is recommanded to check PyGtkSourceView in the 
+PyGTK All-in-one installer to have useful features like line numbering and syntax 
+coloration.<br />On a Unix system one can run a graphical python application just by running the 
+Python script from the console or by clicking on it, but on Windows it is a bit 
+different. There are two solutions:
+
+</p>
+<ol>
+<li>Renaming the Meld script <code>bin/meld</code> to <code>bin/meld.pyw</code>. That tells Windows to 
+run the program as a GUI application, this is very handy because it will not 
+launch a command prompt (This is the case when the extension is .py).</li>
+<li><p>Creating a link from <code>bin/meld</code> and then edit the target 
+(Right Click / Properties) and prepend "C:\Python27\pythonw.exe" to the path of 
+the Meld script.</p>
+<p> C:\Python27\pythonw.exe C:\meld-1.6.0\bin\meld</p>
+</li>
+</ol>
+<p><code>pythonw.exe</code> should be used when you run a GUI application. It avoids a 
+command prompt from being displayed.<br />Once these steps have been done, you can run Meld like any standard Windows 
+application.
+
+
+</p>
+<h2>Configure Git to use Meld</h2>
+<p>When you run <code>git difftool -g</code> for the first time (or with <code>--prompt</code> to 
+override the configuration), the command lists all the tools that are supported. 
+A supported tool can be configured with:
+
+</p>
+<pre><code><span class="comment"># set up the default gui diff tool</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span> <span class="identifier">diff</span>.<span class="identifier">guitool</span> <span class="constant">TOOL_NAME</span></code></pre>
+<p>When the <code>diff.guitool</code> or <code>diff.tool</code> is defined with the name of a supported 
+tool it is only possible to define the path to the tool and not a custom 
+command. If you try to define a custom command with a supported tool like Meld 
+(<code>difftool.meld.cmd</code>) you will get this kind of error:
+
+</p>
+<pre><code><span class="constant">C</span><span class="symbol">:</span>\<span class="constant">Program</span> <span class="constant">Files</span> (<span class="identifier">x86</span>)\<span class="constant">Git</span>/<span class="identifier">libexec</span>/<span class="identifier">git</span>-<span class="identifier">core</span>/<span class="identifier">mergetools</span>/<span class="identifier">meld</span><span class="symbol">:</span> <span class="identifier">line</span> <span class="number">2</span><span class="symbol">:</span> <span class="identifier">meld</span><span class="symbol">:</span> <span class="identifier">command</span> <span class="identifier"><span class="keyword">not</span></span> <span class="identifier">found</span></code></pre>
+<p>This can be confusing because on Windows, Meld is not listed as a supported 
+tool even if it actually is. So on Windows, like on Ubuntu, you only 
+have to set the Meld path. On Windows it consists in:
+
+</p>
+<pre><code><span class="comment"># set up Meld as the default gui diff tool</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span>  <span class="identifier">diff</span>.<span class="identifier">guitool</span> <span class="identifier">meld</span>
+
+<span class="comment"># set the path to Meld</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span> <span class="identifier">difftool</span>.<span class="identifier">meld</span>.<span class="identifier">path</span> <span class="constant">C</span><span class="symbol">:</span>/<span class="identifier">meld</span>-<span class="number">1.6</span>.<span class="number">0</span>/<span class="constant">Bin</span>/<span class="identifier">meld</span>.<span class="identifier">sh</span></code></pre>
+<p>The <code>meld.sh</code> is a shell script used to launch Meld. This is needed because on 
+Windows there is no equivalent for the 
+<a href="http://en.wikipedia.org/wiki/Shebang_%28Unix%29">shebang</a>. The content of this 
+script is:
+
+</p>
+<pre><code>#!<span class="regexp">/bin/</span>env bash
+C:<span class="regexp">/Python27/</span>pythonw.exe C:<span class="regexp">/meld-1.6.0/</span>bin/meld $@</code></pre>
+<p>Now, you can run
+
+</p>
+<pre><code><span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">difftool</span> -<span class="identifier">g</span></code></pre>
+<p>inside any git repository to compare files with Meld.   
+
+</p>
+<p>To remove the confirmation before each difftool invocation, use:
+
+</p>
+<pre><code><span class="comment"># disable the promt before each invocation</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span> <span class="identifier">difftool</span>.<span class="identifier">prompt</span> <span class="identifier"><span class="keyword">false</span></span></code></pre>
+<h3>Meld as a merge tool</h3>
+<p>The same simple steps can be reproduced to configure the merge tool:
+
+</p>
+<pre><code><span class="comment"># set up Meld as the default merge tool</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span>  <span class="identifier"><span class="keymethods">merge</span></span>.<span class="identifier">tool</span> <span class="identifier">meld</span>
+
+<span class="comment"># set the path to Meld</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span> <span class="identifier">mergetool</span>.<span class="identifier">meld</span>.<span class="identifier">path</span> <span class="constant">C</span><span class="symbol">:</span>/<span class="identifier">meld</span>-<span class="number">1.6</span>.<span class="number">0</span>/<span class="constant">Bin</span>/<span class="identifier">meld</span>.<span class="identifier">sh</span>    
+
+<span class="comment"># disable the promt before each invocation</span>
+<span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span> <span class="identifier">mergetool</span>.<span class="identifier">prompt</span> <span class="identifier"><span class="keyword">false</span></span></code></pre>
+</div>
+                        <div id="disqus_thread"></div>
+                        <script type="text/javascript">
+                            jQuery(function ($) {
+                                var disqus_shortname = 'lfontblog',
+                                    disqus_identifier = '/' +
+                                                        $('.sidebar-node .date').text() +
+                                                        '/' +
+                                                        $('.article .title').text();
+
+                                (function() {
+                                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                                    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                                })();
+                            });
+                        </script>
+                    </article>
+                </div>
+
+                <div id="sidebar">
+                    <div class="sidebar-node author">
+                        <h3>About the author</h3>
+                        <img class="if-gravatar gravatar" src="http://www.gravatar.com/avatar/34619a8ae564c2e0ce2998df24583fb1?r=pg&amp;s=200.jpg&amp;d=identicon" />
+                        <dl>
+                            <dt>Name: </dt>
+                            <dd class="name">Loïc Fontaine</dd>
+                        </dl>
+                        <dl class="if-github">
+                            <dt>GitHub: </dt>
+                            <dd class="github"><a href="https://github.com/lfont">lfont</a></dd>
+                        </dl>
+                        <dl class="if-twitter">
+                            <dt>Twitter: </dt>
+                            <dd class="twitter"><a href="https://twitter.com/loic_fontaine">loic_fontaine</a></dd>
+                        </dl>
+                        <dl class="if-location">
+                            <dt>Location: </dt>
+                            <dd class="location">Paris, France</dd>
+                        </dl>
+                        <dl class="if-bio">
+                            <dt>Bio: </dt>
+                            <dd class="bio">I am a developer passionate about the Web, Unix and a great lover of the JavaScript language.</dd>
+                        </dl>
+                    </div>
+
+                    <div class="sidebar-node if-date">
+                        <h3>About this article</h3>
+                        <div class="if-twitter">
+                            <a href="https://twitter.com/share" class="twitter-share-button" data-via="loic_fontaine">Tweet</a>
+                            <script>
+                                !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+                            </script>
+                        </div>
+                        <dl>
+                            <dt>Publish Date: </dt>
+                            <dd class="date">Monday, Sep 17 2012</dd>
+                        </dl>
+                    </div>
+                    
+                    <div class="sidebar-node if-byThisAuthor">
+                        <h3>Also by this author</h3>
+                        <nav class="byThisAuthor"><ul><li><a href="/firefox-os-on-galaxy-nexus">firefox os on galaxy nexus</a></li><li><a href="/making-a-desktop-app-with-node">making a desktop app with node</a></li><li><a href="/what-s-my-current-branch-">what s my current branch </a></li><li><a href="/blacksmith">blacksmith</a></li><li><a href="/hello-world">hello world</a></li></ul></nav>
+                    </div>
+
+                    <div class="sidebar-node if-twitter">
+                        <h3>More news by this author</h3>
+                        <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+                        <script>
+                            (function ($) {
+                                var user = $('.author .twitter').text(),
+                                    widget = new TWTR.Widget({
+                                        version: 2,
+                                        type: 'profile',
+                                        rpp: 4,
+                                        interval: 30000,
+                                        width: 'auto',
+                                        height: 250,
+                                        theme: {
+                                            shell: {
+                                                background: '#303030',
+                                                color: '#ffffff'
+                                            },
+                                            tweets: {
+                                                background: '#f5f5f5',
+                                                color: '#000000',
+                                                links: '#0080c0'
+                                            }
+                                        },
+                                        features: {
+                                            scrollbar: false,
+                                            loop: false,
+                                            live: true,
+                                            behavior: 'all'
+                                        }
+                                    });
+
+                                widget.render().setUser(user).start();
+                            }(jQuery));
+                        </script>
+                    </div>
+                </div>
+            </div>
+
+            <footer id="footer">
+                <p>© 2012 Loïc Fontaine</p>
+                <p>Articles are licensed under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>. All code snippets used in the examples are in the public domain.</p>
+                <p>Styled with a modified version of <a href="http://quotedprintable.com/pages/scribbish">scribbish</a> inspired by the theme of <a href="http://howtonode.org">HowToNode.org</a></p>
+                <p>Powered by <a href="http://nodejitsu.com">Nodejitsu</a> / generated by <a href="http://blacksmith.jit.su">Blacksmith</a></p>
+            </footer>
+        </div>
+        
+        <script>
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-34256671-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var ss = document.getElementsByTagName('script');
+                var s = ss[ss.length - 1]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    </body>
+</html>

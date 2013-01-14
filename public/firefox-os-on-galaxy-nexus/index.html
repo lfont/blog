@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="description" content="lfont a blog about my vision of development." />
+        <meta name="keywords" content="firefox,os,nexus,android,code,javascript,node" />
+        <meta name="viewport" content="width=device-width" />
+        <title>Firefox OS on Galaxy Nexus - lfont's blog</title>
+        <link rel="icon" type="image/png" href="/images/favicon.png" />
+        <link rel="stylesheet" href="/css/application.css" type="text/css" media="all" />
+        <link rel="stylesheet" href="/css/blacksmith.css" type="text/css" />
+        <script src="/js/modernizr.custom.js"></script>
+        <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    </head>
+    <body>
+        <div id="container">
+            <header id="header">
+                <a href="/">
+                    <div class="title">lfont's blog</div>
+                    <div class="tagline">The vision of a developer</div>
+                </a>
+            </header>
+
+            <div id="main" class="metadata">
+                <div id="page">
+                    <article class="article">
+                        <h1 class="title"><a href="/firefox-os-on-galaxy-nexus">Firefox OS on Galaxy Nexus</a></h1>
+                        <div class="content"><p><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS">Firefox OS</a> a.k.a 
+(B2G) is a mobile operating system made by Mozilla. The main concept of the OS is 
+based on the fact that applications are developed with Web standards.<br />Firefox OS shares a lot of components with the Firefox browser. The applications 
+are running on top of the same Gecko engine, but Firefox OS uses a custom user 
+interface called <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Gaia">Gaia</a> 
+that is more suitable for mobile devices.<br />Firefox OS is under active development but it is not ready for the mass market 
+yet. Fortunately, it is an Open Source project so we can easily get an early preview of 
+the OS by following some simple steps.
+
+</p>
+<h2>How to install Firefox OS on a Galaxy Nexus</h2>
+<p>The <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Boot_to_Gecko/B2G_build_prerequisites">Build steps</a> 
+of Firefox OS are quite simple. The team behind the project has decided to 
+support some existing devices as build targets.<br />The support of these devices are not at the same level of reliability. Indeed 
+the Galaxy Nexus has a level of 3. That means that is possible to install the 
+system on this device, but you are alone if you find bugs or if it lacks some 
+features.<br />By following the steps below I have been able to build the OS on Ubuntu 12.10 
+and get it run on my Galaxy Nexus. If you decide to give it a try, keep in 
+mind that Firefox OS is not ready to be used as your day-to-day mobile OS.
+
+</p>
+<h3>Set the udev rules</h3>
+<p>Firefox OS uses the same tools as Android to manage the devices. We need to add some udev rules to have access to the device through <code>adb</code>.
+
+</p>
+<pre><code><span class="comment"># /etc/udev/rules.d/51.-android.rules</span>
+SUBSYSTEM==<span class="string">"usb"</span>, ATTRS{idVendor}==<span class="string">"04e8"</span>, ATTRS{idProduct}==<span class="string">"685c"</span>, MODE=<span class="string">"0666"</span>, GROUP=<span class="string">"plugdev"</span> <span class="comment">#Normal Galaxy Nexus</span>
+SUBSYSTEM==<span class="string">"usb"</span>, ATTRS{idVendor}==<span class="string">"04e8"</span>, ATTRS{idProduct}==<span class="string">"6860"</span>, MODE=<span class="string">"0666"</span>, GROUP=<span class="string">"plugdev"</span> <span class="comment">#Debug Galaxy Nexus</span>
+SUBSYSTEM==<span class="string">"usb"</span>, ATTRS{idVendor}==<span class="string">"18d1"</span>, ATTRS{idProduct}==<span class="string">"4e30"</span>, MODE=<span class="string">"0666"</span>, GROUP=<span class="string">"plugdev"</span> <span class="comment">#Fastboot Galaxy Nexus</span></code></pre>
+<p>Then we must restart the udev service:
+
+</p>
+<pre><code><span class="variable">$ </span><span class="identifier">service</span> <span class="identifier">udev</span> <span class="identifier">restart</span></code></pre>
+<h3>Backup the device</h3>
+<p>There are a lot of chance that you want to reinstall the stock Android system, 
+so a backup of the device can be useful. Before running the <code>adb</code> command, you have to check if your device is in the USB debug mode.
+
+</p>
+<pre><code>$ adb backup -apk -noshared -all -nosystem -f ./20120916.ab</code></pre>
+<p>The <code>adb backup</code> does not backup your SMS, if you want to preserve them you should
+use an app like <a href="https://play.google.com/store/apps/details?id=com.riteshsahu.SMSBackupRestore&amp;feature=search_result#?t=W251bGwsMSwxLDEsImNvbS5yaXRlc2hzYWh1LlNNU0JhY2t1cFJlc3RvcmUiXQ..">SMSBackupAndResote</a>.
+
+</p>
+<h3>Install the required packages</h3>
+<p>To build the Firefox OS source code, you must install the following packages:
+
+</p>
+<pre><code><span class="variable">$ </span><span class="identifier">sudo</span> <span class="identifier">apt</span>-<span class="identifier">get</span> <span class="identifier">install</span> \
+    <span class="identifier">autoconf2</span>.<span class="number">13</span> \
+    <span class="identifier">git</span> \
+    <span class="identifier">ccache</span> \
+    <span class="identifier">gcc</span> \
+    <span class="identifier">g</span>++ \
+    <span class="identifier">gcc</span>-<span class="number">4.6</span> \
+    <span class="identifier">g</span>++-<span class="number">4.6</span> \
+    <span class="identifier">g</span>++-<span class="number">4.6</span>-<span class="identifier">multilib</span> \
+    <span class="identifier">bison</span> \
+    <span class="identifier">flex</span> \
+    <span class="identifier">lib32ncurses5</span>-<span class="identifier">dev</span> \
+    <span class="identifier">ia32</span>-<span class="identifier">libs</span> \
+    <span class="identifier">lib32z1</span>-<span class="identifier">dev</span> \
+    <span class="identifier">make</span> \
+    <span class="identifier">curl</span> \
+    <span class="identifier"><span class="keymethods">zip</span></span> \
+    <span class="identifier">openjdk</span>-<span class="number">6</span>-<span class="identifier">jdk</span></code></pre>
+<h3>Clone the B2G repository</h3>
+<p>Just grab the source from the GitHub repository:
+
+</p>
+<pre><code><span class="identifier">git</span> <span class="identifier"><span class="keymethods">clone</span></span> <span class="identifier">https</span><span class="symbol">:</span>/<span class="regexp">/github.com/mozilla</span>-<span class="identifier">b2g</span>/<span class="constant">B2G</span>.<span class="identifier">git</span></code></pre>
+<h3>Configure the B2G build system</h3>
+<p>Now, we have to configure the build to target our Galaxy Nexus device:
+
+</p>
+<pre><code>./config.sh galaxy-nexus</code></pre>
+<h3>Fix the key mapping</h3>
+<p>For instance, Firefox OS does not play well with devices that do not have 
+physical keys. The ergonomy is based on the fact that a "home" button exists.<br />One quick and dirty solution is to remap the volume up key to behave like a 
+"home" button. A better solution is probably to add a virtual button bar to 
+Gaia, like the virtual button bar of Android, but this is out of scope for this
+article.
+
+</p>
+<pre><code><span class="comment"># B2G/device/samsung/tuna/tuna-gpio-keypad.kl</span>
+key <span class="number">114</span>   VOLUME_DOWN       WAKE
+key <span class="number">115</span>   HOME              WAKE
+key <span class="number">116</span>   POWER             WAKE</code></pre>
+<h3>Build B2G</h3>
+<p>Ubuntu 12.10 makes use of GCC 4.7, but the source does not compile with this 
+version of GCC because some constructs are not supported anymore. We can use 
+<a href="http://linux.die.net/man/8/update-alternatives"><code><span class="identifier"><span class="keymethods">update</span></span>-<span class="identifier">alternatives</span></code></a> to
+temporaly switch back to GCC 4.6.
+
+</p>
+<p>First, we have to register the two versions of GCC:
+
+</p>
+<pre><code>$ update-alternatives --install /usr/bin/g++ g++ <span class="regexp">/usr/</span>bin/g++-<span class="number">4.7</span> <span class="number">100</span>
+$ update-alternatives --install /usr/bin/g++ g++ <span class="regexp">/usr/</span>bin/g++-<span class="number">4.6</span> <span class="number">50</span>
+
+$ update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-<span class="number">4.7</span> <span class="number">100</span>
+$ update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-<span class="number">4.6</span> <span class="number">50</span>
+
+$ update-alternatives --install /usr/bin/cpp cpp-bin /usr/bin/cpp-<span class="number">4.7</span> <span class="number">100</span>
+$ update-alternatives --install /usr/bin/cpp cpp-bin /usr/bin/cpp-<span class="number">4.6</span> <span class="number">50</span></code></pre>
+<p>Then, we can set the version of GCC to 4.6:
+
+</p>
+<pre><code>$ update-alternatives --<span class="keyword">set</span> g++ /usr/bin/g++-<span class="number">4.6</span>
+$ update-alternatives --<span class="keyword">set</span> gcc /usr/bin/gcc-<span class="number">4.6</span>
+$ update-alternatives --<span class="keyword">set</span> cpp-bin /usr/bin/cpp-<span class="number">4.6</span></code></pre>
+<p>Let's build the code:
+
+</p>
+<pre><code>$ ./build.sh</code></pre>
+<p>After the build, we can restore the default version of GCC by executing the 
+following commands:
+
+</p>
+<pre><code><span class="variable">$ </span><span class="identifier"><span class="keymethods">update</span></span>-<span class="identifier">alternatives</span> --<span class="identifier">auto</span> <span class="identifier">g</span>++
+<span class="variable">$ </span><span class="identifier"><span class="keymethods">update</span></span>-<span class="identifier">alternatives</span> --<span class="identifier">auto</span> <span class="identifier">gcc</span>
+<span class="variable">$ </span><span class="identifier"><span class="keymethods">update</span></span>-<span class="identifier">alternatives</span> --<span class="identifier">auto</span> <span class="identifier">cpp</span>-<span class="identifier">bin</span></code></pre>
+<h3>Flash the system</h3>
+<p>The <code>flash</code> script manages all the necessary steps to flash the OS to the 
+device. Unlocking the bootloader of the device is one of these steps.<br />If your device has a locked bootloader it will be unlocked. Take care that 
+unlocking the bootloader will wipe off all the data of your device, including the 
+content of <code>/mnt/sdcard</code>!
+
+</p>
+<pre><code>$ ./flash</code></pre>
+<p>You should now have Firefox OS up and running on your Galaxy Nexus! 
+Happy testing.
+
+</p>
+<h3>Switch back to Android</h3>
+<p>To reinstall Android on your device you can use one of the
+<a href="https://developers.google.com/android/nexus/images#mysid">factory images</a>.
+By running the following script your device will be completely restored.
+
+</p>
+<pre><code>$ ./flash-all.sh</code></pre>
+<p>Then restore the backup made by <code>adb</code>. Do not forget to re-enable the USB debug
+mode:
+
+</p>
+<pre><code>$ adb restore ./20120916.ab</code></pre>
+</div>
+                        <div id="disqus_thread"></div>
+                        <script type="text/javascript">
+                            jQuery(function ($) {
+                                var disqus_shortname = 'lfontblog',
+                                    disqus_identifier = '/' +
+                                                        $('.sidebar-node .date').text() +
+                                                        '/' +
+                                                        $('.article .title').text();
+
+                                (function() {
+                                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                                    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                                })();
+                            });
+                        </script>
+                    </article>
+                </div>
+
+                <div id="sidebar">
+                    <div class="sidebar-node author">
+                        <h3>About the author</h3>
+                        <img class="if-gravatar gravatar" src="http://www.gravatar.com/avatar/34619a8ae564c2e0ce2998df24583fb1?r=pg&amp;s=200.jpg&amp;d=identicon" />
+                        <dl>
+                            <dt>Name: </dt>
+                            <dd class="name">Loïc Fontaine</dd>
+                        </dl>
+                        <dl class="if-github">
+                            <dt>GitHub: </dt>
+                            <dd class="github"><a href="https://github.com/lfont">lfont</a></dd>
+                        </dl>
+                        <dl class="if-twitter">
+                            <dt>Twitter: </dt>
+                            <dd class="twitter"><a href="https://twitter.com/loic_fontaine">loic_fontaine</a></dd>
+                        </dl>
+                        <dl class="if-location">
+                            <dt>Location: </dt>
+                            <dd class="location">Paris, France</dd>
+                        </dl>
+                        <dl class="if-bio">
+                            <dt>Bio: </dt>
+                            <dd class="bio">I am a developer passionate about the Web, Unix and a great lover of the JavaScript language.</dd>
+                        </dl>
+                    </div>
+
+                    <div class="sidebar-node if-date">
+                        <h3>About this article</h3>
+                        <div class="if-twitter">
+                            <a href="https://twitter.com/share" class="twitter-share-button" data-via="loic_fontaine">Tweet</a>
+                            <script>
+                                !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+                            </script>
+                        </div>
+                        <dl>
+                            <dt>Publish Date: </dt>
+                            <dd class="date">Monday, Oct 8 2012</dd>
+                        </dl>
+                    </div>
+                    
+                    <div class="sidebar-node if-byThisAuthor">
+                        <h3>Also by this author</h3>
+                        <nav class="byThisAuthor"><ul><li><a href="/use-meld-with-git-on-windows">use meld with git on windows</a></li><li><a href="/making-a-desktop-app-with-node">making a desktop app with node</a></li><li><a href="/what-s-my-current-branch-">what s my current branch </a></li><li><a href="/blacksmith">blacksmith</a></li><li><a href="/hello-world">hello world</a></li></ul></nav>
+                    </div>
+
+                    <div class="sidebar-node if-twitter">
+                        <h3>More news by this author</h3>
+                        <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+                        <script>
+                            (function ($) {
+                                var user = $('.author .twitter').text(),
+                                    widget = new TWTR.Widget({
+                                        version: 2,
+                                        type: 'profile',
+                                        rpp: 4,
+                                        interval: 30000,
+                                        width: 'auto',
+                                        height: 250,
+                                        theme: {
+                                            shell: {
+                                                background: '#303030',
+                                                color: '#ffffff'
+                                            },
+                                            tweets: {
+                                                background: '#f5f5f5',
+                                                color: '#000000',
+                                                links: '#0080c0'
+                                            }
+                                        },
+                                        features: {
+                                            scrollbar: false,
+                                            loop: false,
+                                            live: true,
+                                            behavior: 'all'
+                                        }
+                                    });
+
+                                widget.render().setUser(user).start();
+                            }(jQuery));
+                        </script>
+                    </div>
+                </div>
+            </div>
+
+            <footer id="footer">
+                <p>© 2012 Loïc Fontaine</p>
+                <p>Articles are licensed under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>. All code snippets used in the examples are in the public domain.</p>
+                <p>Styled with a modified version of <a href="http://quotedprintable.com/pages/scribbish">scribbish</a> inspired by the theme of <a href="http://howtonode.org">HowToNode.org</a></p>
+                <p>Powered by <a href="http://nodejitsu.com">Nodejitsu</a> / generated by <a href="http://blacksmith.jit.su">Blacksmith</a></p>
+            </footer>
+        </div>
+        
+        <script>
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-34256671-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var ss = document.getElementsByTagName('script');
+                var s = ss[ss.length - 1]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    </body>
+</html>

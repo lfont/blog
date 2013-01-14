@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="lfont a blog about my vision of development.">
+        <meta name="keywords" content="">
+        <meta name="viewport" content="width=device-width">
+        <title>lfont's blog</title>
+        <link rel="icon" type="image/png" href="/images/favicon.png" />
+        <link rel="stylesheet" href="/css/application.css" type="text/css" media="all">
+        <link rel="stylesheet" href="/css/blacksmith.css" type="text/css">
+        <script src="/js/modernizr.custom.js"></script>
+        <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    </head>
+    <body>
+        <div id="container">
+            <header id="header">
+                <a href="/">
+                    <div class="title">lfont's blog</div>
+                    <div class="tagline">The vision of a developer</div>
+                </a>
+            </header>
+
+            <div id="main" class="metadata">
+                <div id="page">
+                    <article class="article">
+                        <h1 class="title"></h1>
+                        <div class="content"></div>
+                        <div id="disqus_thread"></div>
+                        <script type="text/javascript">
+                            jQuery(function ($) {
+                                var disqus_shortname = 'lfontblog',
+                                    disqus_identifier = '/' +
+                                                        $('.sidebar-node .date').text() +
+                                                        '/' +
+                                                        $('.article .title').text();
+
+                                (function() {
+                                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                                    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                                })();
+                            });
+                        </script>
+                    </article>
+                </div>
+
+                <div id="sidebar">
+                    <div class="sidebar-node author">
+                        <h3>About the author</h3>
+                        <img class="if-gravatar gravatar" />
+                        <dl>
+                            <dt>Name: </dt>
+                            <dd class="name">John Doe</dd>
+                        </dl>
+                        <dl class="if-github">
+                            <dt>GitHub: </dt>
+                            <dd class="github">johnd</dd>
+                        </dl>
+                        <dl class="if-twitter">
+                            <dt>Twitter: </dt>
+                            <dd class="twitter">johnd</dd>
+                        </dl>
+                        <dl class="if-location">
+                            <dt>Location: </dt>
+                            <dd class="location">Paris, France</dd>
+                        </dl>
+                        <dl class="if-bio">
+                            <dt>Bio: </dt>
+                            <dd class="bio"></dd>
+                        </dl>
+                    </div>
+
+                    <div class="sidebar-node if-date">
+                        <h3>About this article</h3>
+                        <div class="if-twitter">
+                            <a href="https://twitter.com/share" class="twitter-share-button" data-via="loic_fontaine">Tweet</a>
+                            <script>
+                                !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+                            </script>
+                        </div>
+                        <dl>
+                            <dt>Publish Date: </dt>
+                            <dd class="date"></dd>
+                        </dl>
+                    </div>
+                    
+                    <div class="sidebar-node if-byThisAuthor">
+                        <h3>Also by this author</h3>
+                        <nav class="byThisAuthor"></nav>
+                    </div>
+
+                    <div class="sidebar-node if-twitter">
+                        <h3>More news by this author</h3>
+                        <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+                        <script>
+                            (function ($) {
+                                var user = $('.author .twitter').text(),
+                                    widget = new TWTR.Widget({
+                                        version: 2,
+                                        type: 'profile',
+                                        rpp: 4,
+                                        interval: 30000,
+                                        width: 'auto',
+                                        height: 250,
+                                        theme: {
+                                            shell: {
+                                                background: '#303030',
+                                                color: '#ffffff'
+                                            },
+                                            tweets: {
+                                                background: '#f5f5f5',
+                                                color: '#000000',
+                                                links: '#0080c0'
+                                            }
+                                        },
+                                        features: {
+                                            scrollbar: false,
+                                            loop: false,
+                                            live: true,
+                                            behavior: 'all'
+                                        }
+                                    });
+
+                                widget.render().setUser(user).start();
+                            }(jQuery));
+                        </script>
+                    </div>
+                </div>
+            </div>
+
+            <footer id="footer">
+                <p>&copy; 2012 Loïc Fontaine</p>
+                <p>Articles are licensed under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>. All code snippets used in the examples are in the public domain.</p>
+                <p>Styled with a modified version of <a href="http://quotedprintable.com/pages/scribbish">scribbish</a> inspired by the theme of <a href="http://howtonode.org">HowToNode.org</a></p>
+                <p>Powered by <a href="http://nodejitsu.com">Nodejitsu</a> / generated by <a href="http://blacksmith.jit.su">Blacksmith</a></p>
+            </footer>
+        </div>
+        
+        <script>
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-34256671-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var ss = document.getElementsByTagName('script');
+                var s = ss[ss.length - 1]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    </body>
+</html>
