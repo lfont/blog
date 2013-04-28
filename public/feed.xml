@@ -1,5 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[lfont's blog]]></title><description><![CDATA[My awesome blog!]]></description><link>my.blog.local</link><generator>NodeJS RSS Module</generator><lastBuildDate>Mon, 14 Jan 2013 21:30:59 GMT</lastBuildDate><atom:link href="/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[<a href="/firefox-os-on-galaxy-nexus">Firefox OS on Galaxy Nexus</a>]]></title><description><![CDATA[<p><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS">Firefox OS</a> a.k.a 
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[lfont's blog]]></title><description><![CDATA[My awesome blog!]]></description><link>blog.lfont.me</link><generator>NodeJS RSS Module</generator><lastBuildDate>Sun, 28 Apr 2013 19:07:40 GMT</lastBuildDate><atom:link href="/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[<a href="/my-first-firefox-os-app">My first Firefox OS app</a>]]></title><description><![CDATA[<p>Almost 7 months has passed since I wrote my last post about <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS">Firefox OS</a>. Many things have happened since. Mozilla has improved its <a href="https://marketplace.firefox.com/developers/">marketplace</a> and on 23rd of April <a href="http://www.geeksphone.com/">Geeksphone</a> began to sale the first Firefox OS smartphones for developers.<br />I told myself that it was then time to become familiar with the deployment of applications on Firefox OS.
+
+</p>
+<h2>What is a Firefox OS App?</h2>
+<p>As a reminder, Firefox OS is not a new platform, the platform is the Web.<br />A Firefox OS's application is completely written using HTML5 and Open Web standards.
+Creating an application for Firefox OS is a very familiar task for a web developer. There is
+no specific SDK or proprietary extension.<br />With regard to application deployment, strategy is very similar to what exists on the
+Chrome Web Store. Applications are distributed in one of two forms: hosted or packaged.
+
+</p>
+<h3>Hosted app</h3>
+<p>An hosted app is just a web app hosted somewhere on the Web. In order to make an existing web app install on Firefox OS, it  requires very little modification. One simply needs to create an <a href="https://developer.mozilla.org/en-US/docs/Apps/Manifest">Open Web App manifest</a>, which is a simple JSON file that describes the application, and serve it with a special <code>Content-Type</code> (<code>application/x-web-app-manifest+json</code>) header.
+Some Web servers automatically associates this <code>Content-Type</code> to files that end with the <code>.webapp</code> extension.<br />With <a href="http://expressjs.com/">express</a>, this association can be registered as follows:
+
+</p>
+<pre><code>express.static.mime.define({ 'application/x-web-app-manifest+json': [ 'webapp' ] });</code></pre>
+<h3>Packaged app</h3>
+<p>A packaged app is a zip file that contains all the code, assets and the Open Web App manifest of the application.
+One of the main advantage of a packaged app is the fact that it can have access to sensitive API of the device on which it runs.<br />There are 3 <a href="https://developer.mozilla.org/en-US/docs/Apps/Packaged_apps#Types_of_packaged_apps">types of packaged app</a> that defined the level of authorization that the app can have on the device.
+
+</p>
+<h3>Open Web App manifest</h3>
+<p>The manifest file can contains a lot of properties but not all of them are mandatory. The number of properties that should be defined vary mostly by the type of app (hosted/packaged), the permission required and the interaction that the app will have with the other apps installed on the devices (see Web Activities below).
+
+</p>
+<h3>Hosted or Packaged app</h3>
+<p>The decision is quite easy to make. This will essentially depend of functionalities that will provide the application. Read the <a href="https://developer.mozilla.org/en-US/docs/Apps/App_permissions">App permissions</a> page on the wiki.
+
+</p>
+<h3>Web Activities</h3>
+<p><a href="https://developer.mozilla.org/en-US/docs/WebAPI/Web_Activities">Web Activities</a> define how the application on the device can exchange data or delegate action to another. Web Activities have not been standardized by the W3C yet. Indeed it's a counter proposal to the Google's <a href="http://webintents.org/">Web Intents</a> specification. You can read this <a href="http://codebits.glennjones.net/webactions/intentsvsactivities.html">Web Activities vs Web Intents comparison</a> for more informations. Don't panic it seems that Mozilla and Google are talking about how they can merge the two proposals.
+
+</p>
+<h3>Distribution</h3>
+<p>Once your app is ready, you can <a href="https://marketplace.firefox.com/developers/validator">validate your manifest</a> before submiting it to the <a href="https://marketplace.firefox.com/">Firefox marketplace</a>. The Firefox model for app distribution is Open, so you can expect to see alternative markets in a near future. It is even possible to <a href="https://developer.mozilla.org/en-US/docs/Apps/Getting_Started">install an app</a> by visiting the app page.
+
+</p>
+<h3>Is HTML5 ready for app?</h3>
+<p>We have read many things about it. The most significant episode is probably the one where Mark Zuckerberg said that <a href="http://www.theverge.com/2012/9/11/3317230/mark-zuckerberg-betting-on-html5-for-mobile-was-a-mistake-hints-at">HTML5 for mobile was a 'mistake'</a>. As it has been highlighted by Sencha with <a href="http://www.sencha.com/blog/the-making-of-fastbook-an-html5-love-story">Fastbook</a>, that was perhaps more a lack of knowledge that the technology itself.<br />Anyway, I think that the reason Facebook and LinkedIn have failed with their HTML5 application is more likely the fact that neither one nor the other have the means to change or improve the platform.<br />The big advantage of Firefox OS is that Mozilla has a lot of experience with the Web and they can afford to spend the necessary specifications to make HTML5 a better platform for application development.</p>
+]]></description><link>http://blog.lfont.me/my-first-firefox-os-app</link><guid isPermaLink="true">http://blog.lfont.me/my-first-firefox-os-app</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Sun, 28 Apr 2013 15:19:00 GMT</pubDate></item><item><title><![CDATA[<a href="/firefox-os-on-the-galaxy-nexus">Firefox OS on the Galaxy Nexus</a>]]></title><description><![CDATA[<p><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS">Firefox OS</a> a.k.a 
 (B2G) is a mobile operating system made by Mozilla. The main concept of the OS is 
 based on the fact that applications are developed with Web standards.<br />Firefox OS shares a lot of components with the Firefox browser. The applications 
 are running on top of the same Gecko engine, but Firefox OS uses a custom user 
@@ -145,7 +184,7 @@ mode:
 
 </p>
 <pre><code>$ adb restore ./20120916.ab</code></pre>
-]]></description><link>http://my.blog.local/firefox-os-on-galaxy-nexus</link><guid isPermaLink="true">http://my.blog.local/firefox-os-on-galaxy-nexus</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Mon, 08 Oct 2012 13:03:13 GMT</pubDate></item><item><title><![CDATA[<a href="/use-meld-with-git-on-windows">Use Meld with Git on Windows</a>]]></title><description><![CDATA[<p><a href="http://meldmerge.org/">Meld</a> is a very nice diff and merge tool written in 
+]]></description><link>http://blog.lfont.me/firefox-os-on-the-galaxy-nexus</link><guid isPermaLink="true">http://blog.lfont.me/firefox-os-on-the-galaxy-nexus</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Mon, 08 Oct 2012 13:03:13 GMT</pubDate></item><item><title><![CDATA[<a href="/use-meld-with-git-on-windows">Use Meld with Git on Windows</a>]]></title><description><![CDATA[<p><a href="http://meldmerge.org/">Meld</a> is a very nice diff and merge tool written in 
 Python that works on Linux, Mac OS and Windows. There is a lot of diff and merge 
 tools out there, but Meld is every efficient for showing the difference between 
 files.
@@ -239,7 +278,7 @@ C:<span class="regexp">/Python27/</span>pythonw.exe C:<span class="regexp">/meld
 
 <span class="comment"># disable the promt before each invocation</span>
 <span class="variable">$ </span><span class="identifier">git</span> <span class="identifier">config</span> --<span class="identifier">global</span> <span class="identifier">mergetool</span>.<span class="identifier">prompt</span> <span class="identifier"><span class="keyword">false</span></span></code></pre>
-]]></description><link>http://my.blog.local/use-meld-with-git-on-windows</link><guid isPermaLink="true">http://my.blog.local/use-meld-with-git-on-windows</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Mon, 17 Sep 2012 09:43:52 GMT</pubDate></item><item><title><![CDATA[<a href="/making-a-desktop-app-with-node">Making a desktop app with node</a>]]></title><description><![CDATA[<p>I have recently heard of <a href="http://appjs.org">AppJS</a>, a SDK to build cross-platform desktop application with HTML, CSS and Javascript. It is in an early stage of development but I decided to go one step forward to the <a href="http://appjs.org/#download">30 Second Quickstart</a> and here is what I found.
+]]></description><link>http://blog.lfont.me/use-meld-with-git-on-windows</link><guid isPermaLink="true">http://blog.lfont.me/use-meld-with-git-on-windows</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Mon, 17 Sep 2012 09:43:52 GMT</pubDate></item><item><title><![CDATA[<a href="/making-a-desktop-app-with-node">Making a desktop app with node</a>]]></title><description><![CDATA[<p>I have recently heard of <a href="http://appjs.org">AppJS</a>, a SDK to build cross-platform desktop application with HTML, CSS and Javascript. It is in an early stage of development but I decided to go one step forward to the <a href="http://appjs.org/#download">30 Second Quickstart</a> and here is what I found.
 
 </p>
 <h2>AppJS is built around Node.js and Chromium</h2>
@@ -310,7 +349,7 @@ body {
 <h3>Attachments</h3>
 <p>You can download a zip of the <a href="/making-a-desktop-app-with-node/reading-a-file.zip">file reader example</a>.
 </p>
-]]></description><link>http://my.blog.local/making-a-desktop-app-with-node</link><guid isPermaLink="true">http://my.blog.local/making-a-desktop-app-with-node</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Fri, 07 Sep 2012 12:45:50 GMT</pubDate></item><item><title><![CDATA[<a href="/what-s-my-current-branch-">What's my current branch?</a>]]></title><description><![CDATA[<p>Actually, I'm using <a href="http://git-scm.com">Git</a> on a Windows desktop at work and I like the default prompt that comes with the Git Bash terminal.<br />I decided to set the same configuration on my Ubuntu laptop.
+]]></description><link>http://blog.lfont.me/making-a-desktop-app-with-node</link><guid isPermaLink="true">http://blog.lfont.me/making-a-desktop-app-with-node</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Fri, 07 Sep 2012 12:45:50 GMT</pubDate></item><item><title><![CDATA[<a href="/what-s-my-current-branch-">What's my current branch?</a>]]></title><description><![CDATA[<p>Actually, I'm using <a href="http://git-scm.com">Git</a> on a Windows desktop at work and I like the default prompt that comes with the Git Bash terminal.<br />I decided to set the same configuration on my Ubuntu laptop.
 
 </p>
 <h2>Displaying the current branch name on the prompt</h2>
@@ -332,7 +371,7 @@ force_color_prompt=yes
 PS1='<span class="variable">${debian_chroot:+($debian_chroot)}</span>\[\<span class="number">033</span>[<span class="number">01</span>;<span class="number">32</span>m\]\u@\h\[\<span class="number">033</span>[<span class="number">00</span>m\]:\[\<span class="number">033</span>[<span class="number">01</span>;<span class="number">34</span>m\]\w\[\<span class="number">033</span>[<span class="number">00</span>m\]\[\<span class="number">033</span>[<span class="number">33</span>m$(__git_ps1 <span class="string">" (%s)"</span>)\<span class="number">033</span>[<span class="number">0</span>m\]
 $ '</code></pre>
 <p>Note the like break before the "$", when the prompt is very long I like not having my command on more than one line. Feel free to remove it if you don't like it.</p>
-]]></description><link>http://my.blog.local/what-s-my-current-branch-</link><guid isPermaLink="true">http://my.blog.local/what-s-my-current-branch-</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Tue, 04 Sep 2012 15:58:33 GMT</pubDate></item><item><title><![CDATA[<a href="/blacksmith">Blacksmith</a>]]></title><description><![CDATA[<p>This blog is generated by <a href="http://blacksmith.jit.su/">Blacksmith</a>.<br />That means that all the pages of this blog are just static files...
+]]></description><link>http://blog.lfont.me/what-s-my-current-branch-</link><guid isPermaLink="true">http://blog.lfont.me/what-s-my-current-branch-</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Tue, 04 Sep 2012 15:58:33 GMT</pubDate></item><item><title><![CDATA[<a href="/blacksmith">Blacksmith</a>]]></title><description><![CDATA[<p>This blog is generated by <a href="http://blacksmith.jit.su/">Blacksmith</a>.<br />That means that all the pages of this blog are just static files...
 
 </p>
 <h2>Static is good</h2>
@@ -356,8 +395,8 @@ $ '</code></pre>
 
 </p>
 <p>EDIT: I found a bug with the restitution of the doctype in Blacksmith. I have <a href="https://github.com/lfont/blacksmith/tree/fix-doctype">a quick and dirty fix</a> that force the HTML 5 doctype. I will push a better fix in a near future.</p>
-]]></description><link>http://my.blog.local/blacksmith</link><guid isPermaLink="true">http://my.blog.local/blacksmith</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Wed, 22 Aug 2012 20:25:46 GMT</pubDate></item><item><title><![CDATA[<a href="/hello-world">hello, world</a>]]></title><description><![CDATA[<p>Hey,
+]]></description><link>http://blog.lfont.me/blacksmith</link><guid isPermaLink="true">http://blog.lfont.me/blacksmith</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Wed, 22 Aug 2012 20:25:46 GMT</pubDate></item><item><title><![CDATA[<a href="/hello-world">hello, world</a>]]></title><description><![CDATA[<p>Hey,
 
 </p>
 <p>This is my first post on my brand new blog. There is nothing really amazing in this post.<br />Except the fact that this blog is going to be the place where I talk about my work and the stuff that make my working days fun.</p>
-]]></description><link>http://my.blog.local/hello-world</link><guid isPermaLink="true">http://my.blog.local/hello-world</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Tue, 21 Aug 2012 08:37:08 GMT</pubDate></item></channel></rss>
+]]></description><link>http://blog.lfont.me/hello-world</link><guid isPermaLink="true">http://blog.lfont.me/hello-world</guid><dc:creator><![CDATA[Loïc Fontaine]]></dc:creator><pubDate>Tue, 21 Aug 2012 08:37:08 GMT</pubDate></item></channel></rss>

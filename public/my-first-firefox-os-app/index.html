@@ -3,9 +3,9 @@
     <head>
         <meta charset="utf-8" />
         <meta name="description" content="lfont a blog about my vision of development." />
-        <meta name="keywords" content="code,javascript,node" />
+        <meta name="keywords" content="firefox os,app,code,javascript,node" />
         <meta name="viewport" content="width=device-width" />
-        <title>hello, world - lfont's blog</title>
+        <title>My first Firefox OS app - lfont's blog</title>
         <link rel="icon" type="image/png" href="/images/favicon.png" />
         <link rel="stylesheet" href="/css/application.css" type="text/css" media="all" />
         <link rel="stylesheet" href="/css/blacksmith.css" type="text/css" />
@@ -24,11 +24,46 @@
             <div id="main" class="metadata">
                 <div id="page">
                     <article class="article">
-                        <h1 class="title"><a href="/hello-world">hello, world</a></h1>
-                        <div class="content"><p>Hey,
+                        <h1 class="title"><a href="/my-first-firefox-os-app">My first Firefox OS app</a></h1>
+                        <div class="content"><p>Almost 7 months has passed since I wrote my last post about <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS">Firefox OS</a>. Many things have happened since. Mozilla has improved its <a href="https://marketplace.firefox.com/developers/">marketplace</a> and on 23rd of April <a href="http://www.geeksphone.com/">Geeksphone</a> began to sale the first Firefox OS smartphones for developers.<br />I told myself that it was then time to become familiar with the deployment of applications on Firefox OS.
 
 </p>
-<p>This is my first post on my brand new blog. There is nothing really amazing in this post.<br />Except the fact that this blog is going to be the place where I talk about my work and the stuff that make my working days fun.</p>
+<h2>What is a Firefox OS App?</h2>
+<p>As a reminder, Firefox OS is not a new platform, the platform is the Web.<br />A Firefox OS's application is completely written using HTML5 and Open Web standards.
+Creating an application for Firefox OS is a very familiar task for a web developer. There is
+no specific SDK or proprietary extension.<br />With regard to application deployment, strategy is very similar to what exists on the
+Chrome Web Store. Applications are distributed in one of two forms: hosted or packaged.
+
+</p>
+<h3>Hosted app</h3>
+<p>An hosted app is just a web app hosted somewhere on the Web. In order to make an existing web app install on Firefox OS, it  requires very little modification. One simply needs to create an <a href="https://developer.mozilla.org/en-US/docs/Apps/Manifest">Open Web App manifest</a>, which is a simple JSON file that describes the application, and serve it with a special <code>Content-Type</code> (<code>application/x-web-app-manifest+json</code>) header.
+Some Web servers automatically associates this <code>Content-Type</code> to files that end with the <code>.webapp</code> extension.<br />With <a href="http://expressjs.com/">express</a>, this association can be registered as follows:
+
+</p>
+<pre><code>express.static.mime.define({ 'application/x-web-app-manifest+json': [ 'webapp' ] });</code></pre>
+<h3>Packaged app</h3>
+<p>A packaged app is a zip file that contains all the code, assets and the Open Web App manifest of the application.
+One of the main advantage of a packaged app is the fact that it can have access to sensitive API of the device on which it runs.<br />There are 3 <a href="https://developer.mozilla.org/en-US/docs/Apps/Packaged_apps#Types_of_packaged_apps">types of packaged app</a> that defined the level of authorization that the app can have on the device.
+
+</p>
+<h3>Open Web App manifest</h3>
+<p>The manifest file can contains a lot of properties but not all of them are mandatory. The number of properties that should be defined vary mostly by the type of app (hosted/packaged), the permission required and the interaction that the app will have with the other apps installed on the devices (see Web Activities below).
+
+</p>
+<h3>Hosted or Packaged app</h3>
+<p>The decision is quite easy to make. This will essentially depend of functionalities that will provide the application. Read the <a href="https://developer.mozilla.org/en-US/docs/Apps/App_permissions">App permissions</a> page on the wiki.
+
+</p>
+<h3>Web Activities</h3>
+<p><a href="https://developer.mozilla.org/en-US/docs/WebAPI/Web_Activities">Web Activities</a> define how the application on the device can exchange data or delegate action to another. Web Activities have not been standardized by the W3C yet. Indeed it's a counter proposal to the Google's <a href="http://webintents.org/">Web Intents</a> specification. You can read this <a href="http://codebits.glennjones.net/webactions/intentsvsactivities.html">Web Activities vs Web Intents comparison</a> for more informations. Don't panic it seems that Mozilla and Google are talking about how they can merge the two proposals.
+
+</p>
+<h3>Distribution</h3>
+<p>Once your app is ready, you can <a href="https://marketplace.firefox.com/developers/validator">validate your manifest</a> before submiting it to the <a href="https://marketplace.firefox.com/">Firefox marketplace</a>. The Firefox model for app distribution is Open, so you can expect to see alternative markets in a near future. It is even possible to <a href="https://developer.mozilla.org/en-US/docs/Apps/Getting_Started">install an app</a> by visiting the app page.
+
+</p>
+<h3>Is HTML5 ready for app?</h3>
+<p>We have read many things about it. The most significant episode is probably the one where Mark Zuckerberg said that <a href="http://www.theverge.com/2012/9/11/3317230/mark-zuckerberg-betting-on-html5-for-mobile-was-a-mistake-hints-at">HTML5 for mobile was a 'mistake'</a>. As it has been highlighted by Sencha with <a href="http://www.sencha.com/blog/the-making-of-fastbook-an-html5-love-story">Fastbook</a>, that was perhaps more a lack of knowledge that the technology itself.<br />Anyway, I think that the reason Facebook and LinkedIn have failed with their HTML5 application is more likely the fact that neither one nor the other have the means to change or improve the platform.<br />The big advantage of Firefox OS is that Mozilla has a lot of experience with the Web and they can afford to spend the necessary specifications to make HTML5 a better platform for application development.</p>
 </div>
                         <div id="disqus_thread"></div>
                         <script type="text/javascript">
@@ -85,13 +120,13 @@
                         </div>
                         <dl>
                             <dt>Publish Date: </dt>
-                            <dd class="date">Tuesday, Aug 21 2012</dd>
+                            <dd class="date">Sunday, Apr 28 2013</dd>
                         </dl>
                     </div>
                     
                     <div class="sidebar-node if-byThisAuthor">
                         <h3>Also by this author</h3>
-                        <nav class="byThisAuthor"><ul><li><a href="/my-first-firefox-os-app">my first firefox os app</a></li><li><a href="/firefox-os-on-the-galaxy-nexus">firefox os on the galaxy nexus</a></li><li><a href="/use-meld-with-git-on-windows">use meld with git on windows</a></li><li><a href="/making-a-desktop-app-with-node">making a desktop app with node</a></li><li><a href="/what-s-my-current-branch-">what s my current branch </a></li><li><a href="/blacksmith">blacksmith</a></li></ul></nav>
+                        <nav class="byThisAuthor"><ul><li><a href="/firefox-os-on-the-galaxy-nexus">firefox os on the galaxy nexus</a></li><li><a href="/use-meld-with-git-on-windows">use meld with git on windows</a></li><li><a href="/making-a-desktop-app-with-node">making a desktop app with node</a></li><li><a href="/what-s-my-current-branch-">what s my current branch </a></li><li><a href="/blacksmith">blacksmith</a></li><li><a href="/hello-world">hello world</a></li></ul></nav>
                     </div>
 
                     <div class="sidebar-node if-twitter">
